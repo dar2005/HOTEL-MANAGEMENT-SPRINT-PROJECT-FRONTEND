@@ -1,0 +1,32 @@
+.rooms-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.room-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.room-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+}
+
+.room-img-container {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.room-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.room-card:hover .room-img-container img {
+  transform: scale(1.05);
+}

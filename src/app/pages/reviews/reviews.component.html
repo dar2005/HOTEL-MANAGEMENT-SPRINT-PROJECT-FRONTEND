@@ -1,0 +1,51 @@
+<div class="reviews-container pt-5 mt-5">
+  <app-navbar></app-navbar>
+
+  <div class="container py-5 mt-5">
+    <div class="row mb-5 text-center">
+      <div class="col-12">
+        <h2 class="fw-bold display-5 mb-3">Guest Experiences</h2>
+        <p class="text-muted lead mx-auto" style="max-width: 600px;">Read honest reviews from our verified guests and discover why they chose our platform.</p>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-5 my-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+      <h5 class="mt-4 text-muted">Loading reviews...</h5>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && reviews.length === 0" class="text-center py-5 my-5 bg-light rounded-4 shadow-sm">
+      <i class="bi bi-chat-square-quote fs-1 text-muted mb-3 d-block"></i>
+      <h4 class="fw-bold">No Reviews Yet</h4>
+      <p class="text-muted">Be the first to stay and leave a review!</p>
+    </div>
+
+    <!-- Reviews Masonry / Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" *ngIf="!isLoading && reviews.length > 0">
+      <div class="col" *ngFor="let review of reviews">
+        <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex text-warning">
+              <i class="bi bi-star-fill" *ngFor="let _ of [].constructor(review.rating)"></i>
+            </div>
+            <span class="text-muted small">{{ review.review_date | date:'mediumDate' }}</span>
+          </div>
+          
+          <p class="fst-italic text-secondary mb-4 flex-grow-1">"{{ review.comment }}"</p>
+          
+          <div class="d-flex align-items-center mt-auto">
+            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-0">Guest #{{ review.reservation_id }}</h6>
+              <span class="text-muted small">Verified Stay</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

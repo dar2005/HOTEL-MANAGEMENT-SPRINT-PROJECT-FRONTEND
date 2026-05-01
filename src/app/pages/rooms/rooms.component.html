@@ -1,0 +1,125 @@
+<div class="rooms-container pt-5 mt-5">
+  <app-navbar></app-navbar>
+
+  <div class="container py-5 mt-5">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="fw-bold mb-2">Explore Our Rooms</h2>
+        <p class="text-muted">Find the perfect space for your stay.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Sidebar Filters -->
+      <div class="col-lg-3 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 100px; z-index: 1;">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5 class="fw-bold m-0"><i class="bi bi-funnel me-2"></i>Filters</h5>
+              <button class="btn btn-sm btn-link text-primary text-decoration-none p-0" (click)="resetFilters()">Clear</button>
+            </div>
+            
+            <hr>
+
+            <!-- Availability Filter -->
+            <div class="mb-4">
+              <h6 class="fw-bold mb-3">Availability</h6>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="availability" id="availAll" value="ALL" [(ngModel)]="filterMode" (change)="applyFilters()">
+                <label class="form-check-label text-muted" for="availAll">All Rooms</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="availability" id="availAvail" value="AVAILABLE" [(ngModel)]="filterMode" (change)="applyFilters()">
+                <label class="form-check-label text-muted" for="availAvail">Available Now</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="availability" id="availUnavail" value="UNAVAILABLE" [(ngModel)]="filterMode" (change)="applyFilters()">
+                <label class="form-check-label text-muted" for="availUnavail">Unavailable</label>
+              </div>
+            </div>
+
+            <!-- Room Type Filter -->
+            <div class="mb-4">
+              <h6 class="fw-bold mb-3">Room Type Name</h6>
+              <input type="text" class="form-control" placeholder="e.g. Deluxe, Suite" [(ngModel)]="filterType" (keyup.enter)="applyFilters()">
+              <small class="text-muted mt-1 d-block">Press enter to apply</small>
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="mb-4">
+              <h6 class="fw-bold mb-3">Price Range ($)</h6>
+              <div class="row g-2 align-items-center">
+                <div class="col-5">
+                  <input type="number" class="form-control" placeholder="Min" [(ngModel)]="minPrice">
+                </div>
+                <div class="col-2 text-center text-muted">-</div>
+                <div class="col-5">
+                  <input type="number" class="form-control" placeholder="Max" [(ngModel)]="maxPrice">
+                </div>
+              </div>
+              <button class="btn btn-primary w-100 mt-3" (click)="applyFilters()">Apply Price Filter</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Room Grid -->
+      <div class="col-lg-9">
+        
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="text-center py-5 my-5">
+          <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+          <h5 class="mt-4 text-muted">Searching for the best rooms...</h5>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoading && rooms.length === 0" class="text-center py-5 my-5 bg-light rounded-4">
+          <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
+          <h4 class="fw-bold">No Rooms Found</h4>
+          <p class="text-muted">We couldn't find any rooms matching your current filters.</p>
+          <button class="btn btn-primary mt-2" (click)="resetFilters()">Clear Filters</button>
+        </div>
+
+        <!-- Grid -->
+        <div class="row row-cols-1 row-cols-md-2 g-4" *ngIf="!isLoading && rooms.length > 0">
+          <div class="col" *ngFor="let room of rooms">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden room-card">
+              
+              <div class="room-img-container position-relative">
+                <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Room Image" style="height: 220px; object-fit: cover;">
+                <div class="position-absolute top-0 end-0 p-2">
+                  <span class="badge bg-success" *ngIf="room.is_available">Available</span>
+                  <span class="badge bg-danger" *ngIf="!room.is_available">Unavailable</span>
+                </div>
+              </div>
+              
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-uppercase text-primary fw-bold small">Room {{ room.room_number }}</span>
+                  <h5 class="card-title fw-bold mb-0 text-success">${{ room.roomType?.price_per_night }}/night</h5>
+                </div>
+                
+                <p class="card-text text-muted mb-3">Experience luxury and comfort in our exquisitely designed room.</p>
+                
+                <div class="d-flex align-items-center text-muted small mb-3">
+                  <span class="me-3"><i class="bi bi-people-fill me-1"></i>2 Guests</span>
+                  <span class="me-3"><i class="bi bi-wifi me-1"></i>Free Wifi</span>
+                  <span><i class="bi bi-tv me-1"></i>TV</span>
+                </div>
+              </div>
+              
+              <div class="card-footer bg-white border-0 pt-0 pb-3 px-4">
+                <button class="btn btn-primary w-100 fw-bold" [routerLink]="['/checkout', room.room_id]" [disabled]="!room.is_available">
+                  Book Now
+                </button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

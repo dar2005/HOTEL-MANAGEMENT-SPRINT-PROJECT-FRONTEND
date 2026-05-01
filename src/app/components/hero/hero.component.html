@@ -1,0 +1,16 @@
+<div class="hero-section d-flex flex-column align-items-center justify-content-center text-white text-center position-relative">
+  <!-- Overlay to darken the background image slightly -->
+  <div class="hero-overlay"></div>
+  
+  <div class="hero-content z-1 px-3 mt-n5">
+    <div *ngIf="isAuthenticated$ | async" class="mb-3">
+      <span class="badge bg-danger rounded-pill px-3 py-2 fs-6">Welcome Back! 👋</span>
+    </div>
+    <h1 class="display-3 fw-bold mb-3 lh-sm" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+      India's Best Online<br>Hotel Booking Platform
+    </h1>
+    <p class="lead fs-4" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+      Book rooms instantly with best prices 🚀
+    </p>
+  </div>
+</div>

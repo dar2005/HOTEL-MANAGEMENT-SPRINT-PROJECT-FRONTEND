@@ -1,0 +1,48 @@
+<div class="hotels-container pt-5 mt-5">
+  <app-navbar></app-navbar>
+
+  <div class="container py-5 mt-5">
+    <div class="row mb-5 text-center">
+      <div class="col-12">
+        <h2 class="fw-bold display-5 mb-3">Our Premium Destinations</h2>
+        <p class="text-muted lead mx-auto" style="max-width: 600px;">Explore our curated selection of luxury hotels across the globe. Find your next perfect getaway.</p>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-5 my-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+      <h5 class="mt-4 text-muted">Discovering hotels...</h5>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && hotels.length === 0" class="text-center py-5 my-5 bg-light rounded-4 shadow-sm">
+      <i class="bi bi-building-x fs-1 text-muted mb-3 d-block"></i>
+      <h4 class="fw-bold">No Hotels Available</h4>
+      <p class="text-muted">We are currently updating our portfolio. Please check back later.</p>
+    </div>
+
+    <!-- Hotels Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5" *ngIf="!isLoading && hotels.length > 0">
+      <div class="col" *ngFor="let hotel of hotels">
+        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hotel-card">
+          <div class="position-relative">
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Hotel Image" style="height: 250px; object-fit: cover;">
+            <div class="position-absolute top-0 end-0 p-3">
+              <span class="badge bg-white text-dark shadow-sm"><i class="bi bi-star-fill text-warning me-1"></i>4.8</span>
+            </div>
+          </div>
+          <div class="card-body p-4 d-flex flex-column">
+            <h4 class="card-title fw-bold mb-2">{{ hotel.name }}</h4>
+            <p class="text-primary small fw-bold mb-3"><i class="bi bi-geo-alt-fill me-1"></i>{{ hotel.location }}</p>
+            <p class="card-text text-muted mb-4 flex-grow-1">{{ hotel.description }}</p>
+            
+            <button class="btn btn-outline-primary w-100 fw-bold" [routerLink]="['/rooms']" [queryParams]="{hotelId: hotel.hotel_id}">
+              View Available Rooms
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
