@@ -1,0 +1,64 @@
+<app-navbar></app-navbar>
+<div class="d-flex" style="height: 100vh; padding-top: 60px;">
+  <app-sidebar [role]="'USER'"></app-sidebar>
+
+  <div class="flex-grow-1 overflow-auto bg-light">
+    <div class="p-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="fw-bold mb-1">Reservation Details</h2>
+          <p class="text-muted mb-0">Review the full booking information for your reservation.</p>
+        </div>
+        <a routerLink="/dashboard" class="btn btn-outline-primary">Back to bookings</a>
+      </div>
+
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Loading reservation details...</p>
+      </div>
+
+      <div *ngIf="!isLoading && errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="!isLoading && reservation" class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+          <div class="row gy-3">
+            <div class="col-md-4">
+              <strong>Reservation ID</strong>
+              <p class="mb-0">#{{ reservation.reservationId }}</p>
+            </div>
+            <div class="col-md-4">
+              <strong>Guest Name</strong>
+              <p class="mb-0">{{ reservation.guestName }}</p>
+            </div>
+            <div class="col-md-4">
+              <strong>Guest Email</strong>
+              <p class="mb-0">{{ reservation.guestEmail || 'N/A' }}</p>
+            </div>
+            <div class="col-md-4">
+              <strong>Guest Phone</strong>
+              <p class="mb-0">{{ reservation.guestPhone || 'N/A' }}</p>
+            </div>
+            <div class="col-md-4">
+              <strong>Room ID</strong>
+              <p class="mb-0">Room {{ reservation.roomId }}</p>
+            </div>
+            <div class="col-md-4">
+              <strong>Total Paid</strong>
+              <p class="mb-0">{{ getTotalPaid() }}</p>
+            </div>
+            <div class="col-md-4">
+              <strong>Check In</strong>
+              <p class="mb-0">{{ reservation.checkInDate | date:'mediumDate' }}</p>
+            </div>
+            <div class="col-md-4">
+              <strong>Check Out</strong>
+              <p class="mb-0">{{ reservation.checkOutDate | date:'mediumDate' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -43,14 +43,15 @@
                   <td>Room {{ res.roomId }}</td>
                   <td>{{ res.checkInDate | date }}</td>
                   <td>{{ res.checkOutDate | date }}</td>
-                  <td class="fw-bold">${{ res.totalPrice }}</td>
+                  <td class="fw-bold">{{ getTotalPaid(res) }}</td>
                   <td class="pe-4">
-                    <button class="btn btn-sm btn-outline-secondary me-2"><i class="bi bi-eye"></i> View</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary me-2" (click)="goToDetails(res)"><i class="bi bi-eye"></i> View</button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
+
 
         </div>
       </div>

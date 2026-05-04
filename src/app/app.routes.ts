@@ -11,6 +11,7 @@ import { ReviewsComponent } from './pages/reviews/reviews.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ReservationDetailComponent } from './pages/reservation-detail/reservation-detail.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { authGuard } from './guards/auth.guard';
@@ -34,6 +35,7 @@ export const routes: Routes = [
   { path: 'checkout/:roomId', component: CheckoutComponent, canActivate: [authGuard] },
   { path: 'confirmation', component: ConfirmationComponent, canActivate: [authGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+  { path: 'dashboard/reservation/:id', component: ReservationDetailComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'admin', component: AdminComponent, canActivate: [authGuard, adminGuard] },
   { path: '**', redirectTo: '' }
