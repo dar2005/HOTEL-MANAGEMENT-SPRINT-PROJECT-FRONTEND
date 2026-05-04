@@ -44,11 +44,4 @@ export class ReservationDetailComponent implements OnInit {
     });
   }
 
-  getTotalPaid(): string {
-    if (!this.reservation) {
-      return '$0';
-    }
-    const paid = this.reservation.totalPrice ?? (this.reservation as any).total_price ?? 0;
-    return `$${paid}`;
-  }
 }

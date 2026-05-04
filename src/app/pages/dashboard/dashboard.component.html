@@ -32,7 +32,6 @@
                   <th scope="col">Room ID</th>
                   <th scope="col">Check In</th>
                   <th scope="col">Check Out</th>
-                  <th scope="col">Total Paid</th>
                   <th scope="col" class="pe-4">Action</th>
                 </tr>
               </thead>
@@ -43,7 +42,6 @@
                   <td>Room {{ res.roomId }}</td>
                   <td>{{ res.checkInDate | date }}</td>
                   <td>{{ res.checkOutDate | date }}</td>
-                  <td class="fw-bold">{{ getTotalPaid(res) }}</td>
                   <td class="pe-4">
                     <button type="button" class="btn btn-sm btn-outline-secondary me-2" (click)="goToDetails(res)"><i class="bi bi-eye"></i> View</button>
                   </td>
