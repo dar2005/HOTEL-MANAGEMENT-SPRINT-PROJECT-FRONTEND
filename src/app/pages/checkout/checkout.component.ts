@@ -23,6 +23,7 @@ export class CheckoutComponent implements OnInit {
   isLoading = false;
   totalPrice = 0;
   nights = 1;
+  minDate: string = new Date().toISOString().split('T')[0];
 
   constructor(
     private route: ActivatedRoute,
@@ -35,11 +36,9 @@ export class CheckoutComponent implements OnInit {
   ) {
     this.checkoutForm = this.fb.group({
       guestName: ['', Validators.required],
-      checkInDate: ['', Validators.required],
-      checkOutDate: ['', Validators.required],
-      cardNumber: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
-      expiry: ['', [Validators.required, Validators.pattern('^(0[1-9]|1[0-2])\\/([0-9]{2})$')]],
-      cvv: ['', [Validators.required, Validators.pattern('^[0-9]{3}$')]]
+      checkInDate: ['', [Validators.required]],
+      checkOutDate: ['', [Validators.required]],
+      paymentType: ['PAY_AT_HOTEL', Validators.required]
     });
   }
 
@@ -78,6 +77,17 @@ export class CheckoutComponent implements OnInit {
       this.isLoading = true;
       const formValue = this.checkoutForm.value;
 
+      if (formValue.checkInDate < this.minDate) {
+        this.toastr.error('Check-in date cannot be in the past');
+        this.isLoading = false;
+        return;
+      }
+      if (formValue.checkOutDate <= formValue.checkInDate) {
+        this.toastr.error('Check-out date must be after check-in date');
+        this.isLoading = false;
+        return;
+      }
+
       const reservation: Reservation = {
         guestName: formValue.guestName,
         guestEmail: 'test@test.com', // mock email
@@ -85,6 +95,7 @@ export class CheckoutComponent implements OnInit {
         checkInDate: formValue.checkInDate,
         checkOutDate: formValue.checkOutDate,
         roomId: this.roomId,
+        room: { roomId: this.roomId } as Room,
         totalPrice: this.totalPrice
       };
 
@@ -95,20 +106,20 @@ export class CheckoutComponent implements OnInit {
           const paymentDto = {
             reservationId: res.reservationId || res.id,
             amount: this.totalPrice,
-            paymentMethod: 'CREDIT_CARD'
+            paymentMethod: formValue.paymentType
           };
           
           this.http.post(`${environment.apiUrl}/api/payments`, paymentDto).subscribe({
             next: () => {
               this.isLoading = false;
               this.toastr.success('Booking confirmed successfully!');
-              this.router.navigate(['/confirmation']);
+              this.router.navigate(['/dashboard']);
             },
             error: (err) => {
               this.isLoading = false;
               // Even if mock payment fails, reservation might be created
               this.toastr.warning('Reservation created, but payment processing failed.', 'Warning');
-              this.router.navigate(['/confirmation']);
+              this.router.navigate(['/dashboard']);
             }
           });
         },
