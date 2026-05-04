@@ -37,6 +37,8 @@ export class CheckoutComponent implements OnInit {
   ) {
     this.checkoutForm = this.fb.group({
       guestName: ['', Validators.required],
+      guestEmail: ['', [Validators.required, Validators.email]],
+      guestPhone: ['', [Validators.required, Validators.pattern('^[0-9]{10,15}$')]],
       checkInDate: ['', [Validators.required]],
       checkOutDate: ['', [Validators.required]],
       paymentType: ['PAY_AT_HOTEL', Validators.required]
@@ -91,8 +93,8 @@ export class CheckoutComponent implements OnInit {
 
       const reservation: Reservation = {
         guestName: formValue.guestName,
-        guestEmail: 'test@test.com', // mock email
-        guestPhone: '1234567890',    // mock phone
+        guestEmail: formValue.guestEmail,
+        guestPhone: formValue.guestPhone,
         checkInDate: formValue.checkInDate,
         checkOutDate: formValue.checkOutDate,
         roomId: this.roomId,

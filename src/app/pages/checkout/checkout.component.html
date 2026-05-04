@@ -30,6 +30,19 @@
                 <div class="invalid-feedback">Guest name is required.</div>
               </div>
 
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Email Address</label>
+                  <input type="email" class="form-control" formControlName="guestEmail" placeholder="john@example.com" [ngClass]="{'is-invalid': checkoutForm.get('guestEmail')?.invalid && checkoutForm.get('guestEmail')?.touched}">
+                  <div class="invalid-feedback">A valid email is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Phone Number</label>
+                  <input type="text" class="form-control" formControlName="guestPhone" placeholder="1234567890" [ngClass]="{'is-invalid': checkoutForm.get('guestPhone')?.invalid && checkoutForm.get('guestPhone')?.touched}">
+                  <div class="invalid-feedback">A valid phone number is required.</div>
+                </div>
+              </div>
+
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Check-in Date</label>
