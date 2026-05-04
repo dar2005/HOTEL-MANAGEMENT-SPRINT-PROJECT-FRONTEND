@@ -8,11 +8,12 @@ import { HttpClient } from '@angular/common/http';
 import { Room, Reservation } from '../../models/models';
 import { environment } from '../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, NavbarComponent],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
 })
