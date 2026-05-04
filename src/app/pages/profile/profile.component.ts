@@ -41,8 +41,8 @@ export class ProfileComponent implements OnInit {
       next: (res) => {
         this.totalBookings = res.length;
         const today = new Date();
-        this.upcomingBookings = res.filter(r => new Date(r.check_in_date) >= today).length;
-        this.completedBookings = res.filter(r => new Date(r.check_out_date) < today).length;
+        this.upcomingBookings = res.filter(r => new Date(r.checkInDate) >= today).length;
+        this.completedBookings = res.filter(r => new Date(r.checkOutDate) < today).length;
         this.recentReservations = res.slice(0, 5);
         this.isLoading = false;
       },

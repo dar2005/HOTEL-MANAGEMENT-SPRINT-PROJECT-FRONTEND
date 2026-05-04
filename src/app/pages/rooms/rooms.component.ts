@@ -52,7 +52,8 @@ export class RoomsComponent implements OnInit {
 
     // If type is set, we use type endpoint
     if (this.filterType && this.filterType.trim() !== '') {
-      this.roomService.getRoomsByType(this.filterType).subscribe({
+      const formattedType = this.formatToTitleCase(this.filterType.trim());
+      this.roomService.getRoomsByType(formattedType).subscribe({
         next: (res) => this.handleSuccess(res),
         error: (err) => this.handleError(err)
       });
@@ -95,5 +96,12 @@ export class RoomsComponent implements OnInit {
     console.error('Failed to load rooms', error);
     this.rooms = [];
     this.isLoading = false;
+  }
+
+  private formatToTitleCase(str: string): string {
+    if (!str) return '';
+    return str.split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
   }
 }

@@ -112,12 +112,12 @@
                     </thead>
                     <tbody>
                       <tr *ngFor="let res of recentReservations">
-                        <td class="ps-4 fw-semibold text-primary">#{{ res.reservation_id }}</td>
-                        <td>{{ res.guest_name }}</td>
-                        <td>Room {{ res.room_id }}</td>
-                        <td class="text-muted small">{{ res.check_in_date | date: 'mediumDate' }}</td>
-                        <td class="text-muted small">{{ res.check_out_date | date: 'mediumDate' }}</td>
-                        <td class="pe-4 fw-semibold">${{ res.total_price }}</td>
+                        <td class="ps-4 fw-semibold text-primary">#{{ res.reservationId }}</td>
+                        <td>{{ res.guestName }}</td>
+                        <td>Room {{ res.roomId }}</td>
+                        <td class="text-muted small">{{ res.checkInDate | date: 'mediumDate' }}</td>
+                        <td class="text-muted small">{{ res.checkOutDate | date: 'mediumDate' }}</td>
+                        <td class="pe-4 fw-semibold">${{ res.totalPrice }}</td>
                       </tr>
                     </tbody>
                   </table>

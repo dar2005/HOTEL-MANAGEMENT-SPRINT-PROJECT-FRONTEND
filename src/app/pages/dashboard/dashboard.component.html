@@ -37,12 +37,12 @@
               </thead>
               <tbody>
                 <tr *ngFor="let res of reservations">
-                  <td class="ps-4 fw-semibold text-primary">#{{ res.reservation_id }}</td>
-                  <td>{{ res.guest_name }}</td>
-                  <td>Room {{ res.room_id }}</td>
-                  <td>{{ res.check_in_date | date }}</td>
-                  <td>{{ res.check_out_date | date }}</td>
-                  <td class="fw-bold">${{ res.total_price }}</td>
+                  <td class="ps-4 fw-semibold text-primary">#{{ res.reservationId }}</td>
+                  <td>{{ res.guestName }}</td>
+                  <td>Room {{ res.roomId }}</td>
+                  <td>{{ res.checkInDate | date }}</td>
+                  <td>{{ res.checkOutDate | date }}</td>
+                  <td class="fw-bold">${{ res.totalPrice }}</td>
                   <td class="pe-4">
                     <button class="btn btn-sm btn-outline-secondary me-2"><i class="bi bi-eye"></i> View</button>
                   </td>

@@ -34,9 +34,9 @@ export class CheckoutComponent implements OnInit {
     private toastr: ToastrService
   ) {
     this.checkoutForm = this.fb.group({
-      guest_name: ['', Validators.required],
-      check_in_date: ['', Validators.required],
-      check_out_date: ['', Validators.required],
+      guestName: ['', Validators.required],
+      checkInDate: ['', Validators.required],
+      checkOutDate: ['', Validators.required],
       cardNumber: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
       expiry: ['', [Validators.required, Validators.pattern('^(0[1-9]|1[0-2])\\/([0-9]{2})$')]],
       cvv: ['', [Validators.required, Validators.pattern('^[0-9]{3}$')]]
@@ -49,13 +49,13 @@ export class CheckoutComponent implements OnInit {
 
     // Calculate price dynamically
     this.checkoutForm.valueChanges.subscribe(val => {
-      if (val.check_in_date && val.check_out_date && this.room) {
-        const start = new Date(val.check_in_date);
-        const end = new Date(val.check_out_date);
+      if (val.checkInDate && val.checkOutDate && this.room) {
+        const start = new Date(val.checkInDate);
+        const end = new Date(val.checkOutDate);
         const diffTime = Math.abs(end.getTime() - start.getTime());
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
         this.nights = diffDays > 0 ? diffDays : 1;
-        this.totalPrice = this.nights * (this.room.roomType?.price_per_night || 0);
+        this.totalPrice = this.nights * (this.room.roomType?.pricePerNight || 0);
       }
     });
   }
@@ -64,7 +64,7 @@ export class CheckoutComponent implements OnInit {
     this.roomService.getById(this.roomId).subscribe({
       next: (res) => {
         this.room = res;
-        this.totalPrice = res.roomType?.price_per_night || 0; // default 1 night
+        this.totalPrice = res.roomType?.pricePerNight || 0; // default 1 night
       },
       error: (err) => {
         this.toastr.error('Could not load room details');
@@ -79,13 +79,13 @@ export class CheckoutComponent implements OnInit {
       const formValue = this.checkoutForm.value;
 
       const reservation: Reservation = {
-        guest_name: formValue.guest_name,
-        guest_email: 'test@test.com', // mock email
-        guest_phone: '1234567890',    // mock phone
-        check_in_date: formValue.check_in_date,
-        check_out_date: formValue.check_out_date,
-        room_id: this.roomId,
-        total_price: this.totalPrice
+        guestName: formValue.guestName,
+        guestEmail: 'test@test.com', // mock email
+        guestPhone: '1234567890',    // mock phone
+        checkInDate: formValue.checkInDate,
+        checkOutDate: formValue.checkOutDate,
+        roomId: this.roomId,
+        totalPrice: this.totalPrice
       };
 
       // 1. Create Reservation
@@ -93,7 +93,7 @@ export class CheckoutComponent implements OnInit {
         next: (res: any) => {
           // 2. Mock Payment Call using DTO assumptions
           const paymentDto = {
-            reservationId: res.reservation_id || res.id,
+            reservationId: res.reservationId || res.id,
             amount: this.totalPrice,
             paymentMethod: 'CREDIT_CARD'
           };

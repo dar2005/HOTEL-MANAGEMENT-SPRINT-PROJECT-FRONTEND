@@ -12,55 +12,55 @@ export interface HotelRequest {
 }
 
 export interface RoomType {
-  room_type_id?: number;
-  type_name: string;
+  roomTypeId?: number;
+  typeName: string;
   description: string;
-  max_occupancy: number;
-  price_per_night: number;
+  maxOccupancy: number;
+  pricePerNight: number;
 }
 
 export interface Room {
-  room_id?: number;
-  room_number: number;
-  room_type_id: number;
-  is_available: boolean;
+  roomId?: number;
+  roomNumber: number;
+  roomTypeId: number;
+  isAvailable: boolean;
   // Optional relations
   roomType?: RoomType;
 }
 
 export interface Amenity {
-  amenity_id?: number;
+  amenityId?: number;
   name: string;
   description: string;
 }
 
 export interface Reservation {
-  reservation_id?: number;
-  guest_name: string;
-  guest_email: string;
-  guest_phone: string;
-  check_in_date: Date | string;
-  check_out_date: Date | string;
-  room_id: number;
-  total_price?: number;
+  reservationId?: number;
+  guestName: string;
+  guestEmail: string;
+  guestPhone: string;
+  checkInDate: Date | string;
+  checkOutDate: Date | string;
+  roomId: number;
+  totalPrice?: number;
   // Optional relations
   room?: Room;
 }
 
 export interface Payment {
-  payment_id?: number;
-  reservation_id: number;
+  paymentId?: number;
+  reservationId: number;
   amount: number;
-  payment_date: Date | string;
-  payment_status: string;
+  paymentDate: Date | string;
+  paymentStatus: string;
 }
 
 export interface Review {
-  review_id?: number;
-  reservation_id: number;
+  reviewId?: number;
+  reservationId: number;
   rating: number;
   comment: string;
-  review_date: Date | string;
+  reviewDate: Date | string;
 }
 
 export interface LoginRequest {
