@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -10,10 +10,19 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   @Input() role: 'USER' | 'ADMIN' = 'USER';
+  displayName: string = 'Account';
 
   constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit(): void {
+    const savedName = localStorage.getItem('username');
+    if (savedName) {
+      // Show first name only for a clean sidebar
+      this.displayName = savedName.split(' ')[0] || savedName;
+    }
+  }
 
   logout() {
     this.authService.logout();

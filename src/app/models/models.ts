@@ -1,5 +1,11 @@
 export interface Hotel {
-  hotel_id?: number;
+  hotelId?: number;
+  name: string;
+  location: string;
+  description: string;
+}
+
+export interface HotelRequest {
   name: string;
   location: string;
   description: string;

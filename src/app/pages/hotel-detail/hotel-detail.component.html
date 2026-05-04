@@ -1,0 +1,136 @@
+<div class="hotel-detail-page">
+  <app-navbar></app-navbar>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="state-center">
+    <div class="loading-ring"></div>
+    <p>Loading hotel details...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!isLoading && errorMsg" class="state-center error-state">
+    <i class="bi bi-exclamation-circle-fill"></i>
+    <h4>{{ errorMsg }}</h4>
+    <button (click)="goBack()" class="btn-back">← Back to Hotels</button>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!isLoading && hotel" class="detail-wrapper">
+
+    <!-- Hero Image -->
+    <div class="detail-hero">
+      <img [src]="hotelImages[hotelId % hotelImages.length]" [alt]="hotel.name" class="hero-img" />
+      <div class="hero-gradient"></div>
+      <div class="hero-info">
+        <button (click)="goBack()" class="btn-back-hero">
+          <i class="bi bi-arrow-left me-2"></i>Back to Hotels
+        </button>
+        <div class="hero-text">
+          <div class="location-badge">
+            <i class="bi bi-geo-alt-fill me-1"></i>{{ hotel.location }}
+          </div>
+          <h1 class="hotel-name">{{ hotel.name }}</h1>
+          <div class="hotel-meta">
+            <span class="meta-chip"><i class="bi bi-hash"></i> ID: {{ hotel.hotelId }}</span>
+            <span class="meta-chip rating-chip"><i class="bi bi-star-fill me-1"></i>4.8 Excellent</span>
+            <span class="meta-chip"><i class="bi bi-person-check me-1"></i>Verified Property</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="detail-body container-xl">
+
+      <div class="detail-grid">
+
+        <!-- Left Column -->
+        <div class="detail-left">
+
+          <!-- About -->
+          <div class="detail-card">
+            <h2 class="section-title"><span class="title-accent">✦</span> About This Hotel</h2>
+            <p class="hotel-description">
+              {{ hotel.description || 'Welcome to ' + hotel.name + ', a premier destination offering world-class amenities, exceptional service, and an unforgettable experience. Set in the heart of ' + hotel.location + ', our hotel blends timeless elegance with modern luxury to create the perfect stay.' }}
+            </p>
+          </div>
+
+          <!-- Amenities -->
+          <div class="detail-card">
+            <h2 class="section-title"><span class="title-accent">✦</span> Amenities & Services</h2>
+            <div class="amenities-grid">
+              <div class="amenity-item" *ngFor="let amenity of amenities">
+                <div class="amenity-icon"><i class="bi {{ amenity.icon }}"></i></div>
+                <span>{{ amenity.label }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gallery Strip -->
+          <div class="detail-card">
+            <h2 class="section-title"><span class="title-accent">✦</span> Gallery</h2>
+            <div class="gallery-strip">
+              <img *ngFor="let img of hotelImages" [src]="img" alt="Gallery" class="gallery-img" loading="lazy" />
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column — Booking Card -->
+        <div class="detail-right">
+          <div class="booking-card">
+            <div class="booking-header">
+              <span class="booking-label">Starting from</span>
+              <div class="booking-price">₹4,999<span>/night</span></div>
+            </div>
+
+            <div class="booking-details">
+              <div class="booking-row">
+                <i class="bi bi-building"></i>
+                <div>
+                  <span class="label">Hotel</span>
+                  <strong>{{ hotel.name }}</strong>
+                </div>
+              </div>
+              <div class="booking-row">
+                <i class="bi bi-geo-alt-fill"></i>
+                <div>
+                  <span class="label">Location</span>
+                  <strong>{{ hotel.location }}</strong>
+                </div>
+              </div>
+              <div class="booking-row">
+                <i class="bi bi-shield-check"></i>
+                <div>
+                  <span class="label">Status</span>
+                  <strong class="status-available">Available</strong>
+                </div>
+              </div>
+            </div>
+
+            <a [routerLink]="['/rooms']" [queryParams]="{hotelId: hotel.hotelId}" class="btn-book">
+              <i class="bi bi-calendar2-check me-2"></i>View Available Rooms
+            </a>
+
+            <div class="booking-perks">
+              <div class="perk"><i class="bi bi-check-circle-fill"></i> Free cancellation up to 24h</div>
+              <div class="perk"><i class="bi bi-check-circle-fill"></i> Best price guaranteed</div>
+              <div class="perk"><i class="bi bi-check-circle-fill"></i> Instant confirmation</div>
+            </div>
+          </div>
+
+          <!-- Quick Info Card -->
+          <div class="info-card">
+            <h3>Quick Info</h3>
+            <div class="info-row"><span>Hotel ID</span><strong>{{ hotel.hotelId }}</strong></div>
+            <div class="info-row"><span>Name</span><strong>{{ hotel.name }}</strong></div>
+            <div class="info-row"><span>Location</span><strong>{{ hotel.location }}</strong></div>
+            <div class="info-row"><span>Rating</span><strong>⭐ 4.8 / 5</strong></div>
+            <div class="info-row"><span>Type</span><strong>Luxury Resort</strong></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

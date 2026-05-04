@@ -1,0 +1,33 @@
+{
+  "/hotels": {
+    "target": "http://localhost:8087",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "warn",
+    "onError": "continue"
+  },
+  "/auth": {
+    "target": "http://localhost:8087",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "warn"
+  },
+  "/rooms": {
+    "target": "http://localhost:8087",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "warn"
+  },
+  "/reviews": {
+    "target": "http://localhost:8087",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "warn"
+  },
+  "/api": {
+    "target": "http://localhost:8087",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "warn"
+  }
+}

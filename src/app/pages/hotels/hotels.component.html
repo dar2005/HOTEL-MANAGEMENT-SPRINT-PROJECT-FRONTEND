@@ -1,48 +1,113 @@
-<div class="hotels-container pt-5 mt-5">
+<div class="hotels-page">
   <app-navbar></app-navbar>
 
-  <div class="container py-5 mt-5">
-    <div class="row mb-5 text-center">
-      <div class="col-12">
-        <h2 class="fw-bold display-5 mb-3">Our Premium Destinations</h2>
-        <p class="text-muted lead mx-auto" style="max-width: 600px;">Explore our curated selection of luxury hotels across the globe. Find your next perfect getaway.</p>
+  <!-- Hero Banner -->
+  <section class="hotels-hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <span class="hero-badge">✦ Premium Collection</span>
+        <h1 class="hero-title">Discover Your Perfect Stay</h1>
+        <p class="hero-sub">Explore our curated selection of luxury hotels and boutique properties across the globe.</p>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <div class="search-field">
+            <i class="bi bi-building"></i>
+            <input type="text" [(ngModel)]="searchName" placeholder="Hotel name..." class="search-input" (keyup.enter)="onSearch()" />
+          </div>
+          <div class="search-divider"></div>
+          <div class="search-field">
+            <i class="bi bi-geo-alt"></i>
+            <input type="text" [(ngModel)]="searchLocation" placeholder="Location..." class="search-input" (keyup.enter)="onSearch()" />
+          </div>
+          <button class="search-btn" (click)="onSearch()">
+            <i class="bi bi-search me-2"></i>Search
+          </button>
+          <button class="clear-btn" *ngIf="searchName || searchLocation" (click)="clearSearch()" title="Clear search">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
       </div>
     </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="hotels-content container-xl py-5">
 
     <!-- Loading State -->
-    <div *ngIf="isLoading" class="text-center py-5 my-5">
-      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
-      <h5 class="mt-4 text-muted">Discovering hotels...</h5>
+    <div *ngIf="isLoading" class="state-container">
+      <div class="loading-ring"></div>
+      <p class="state-text">Discovering hotels for you...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!isLoading && errorMsg" class="error-state">
+      <div class="error-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+      <h4>Connection Error</h4>
+      <p>{{ errorMsg }}</p>
+      <button class="btn-retry" (click)="fetchHotels()"><i class="bi bi-arrow-clockwise me-2"></i>Try Again</button>
     </div>
 
     <!-- Empty State -->
-    <div *ngIf="!isLoading && hotels.length === 0" class="text-center py-5 my-5 bg-light rounded-4 shadow-sm">
-      <i class="bi bi-building-x fs-1 text-muted mb-3 d-block"></i>
-      <h4 class="fw-bold">No Hotels Available</h4>
-      <p class="text-muted">We are currently updating our portfolio. Please check back later.</p>
+    <div *ngIf="!isLoading && !errorMsg && hotels.length === 0" class="empty-state">
+      <div class="empty-icon"><i class="bi bi-building-x"></i></div>
+      <h4>No Hotels Found</h4>
+      <p>Try adjusting your search or <a (click)="clearSearch()" class="link-reset">browse all hotels</a>.</p>
+    </div>
+
+    <!-- Results Count -->
+    <div *ngIf="!isLoading && !errorMsg && hotels.length > 0" class="results-header">
+      <div class="results-meta">
+        <span class="results-count">{{ hotels.length }} Hotel{{ hotels.length !== 1 ? 's' : '' }} Found</span>
+        <span *ngIf="searchName || searchLocation" class="results-filter">
+          <i class="bi bi-funnel-fill me-1"></i>
+          <ng-container *ngIf="searchName">Name: "{{ searchName }}"</ng-container>
+          <ng-container *ngIf="searchName && searchLocation"> &amp; </ng-container>
+          <ng-container *ngIf="searchLocation">Location: "{{ searchLocation }}"</ng-container>
+          <button class="clear-filter-btn" (click)="clearSearch()">
+            <i class="bi bi-x"></i> Clear
+          </button>
+        </span>
+      </div>
     </div>
 
     <!-- Hotels Grid -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5" *ngIf="!isLoading && hotels.length > 0">
-      <div class="col" *ngFor="let hotel of hotels">
-        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hotel-card">
-          <div class="position-relative">
-            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Hotel Image" style="height: 250px; object-fit: cover;">
-            <div class="position-absolute top-0 end-0 p-3">
-              <span class="badge bg-white text-dark shadow-sm"><i class="bi bi-star-fill text-warning me-1"></i>4.8</span>
-            </div>
+    <div class="hotels-grid" *ngIf="!isLoading && !errorMsg && hotels.length > 0">
+      <div class="hotel-card" *ngFor="let hotel of hotels; let i = index">
+        <div class="card-img-wrapper">
+          <img [src]="getHotelImage(i)" [alt]="hotel.name" class="card-img" loading="lazy" />
+          <div class="card-img-overlay">
+            <span class="hotel-id-badge">ID: {{ hotel.hotelId }}</span>
           </div>
-          <div class="card-body p-4 d-flex flex-column">
-            <h4 class="card-title fw-bold mb-2">{{ hotel.name }}</h4>
-            <p class="text-primary small fw-bold mb-3"><i class="bi bi-geo-alt-fill me-1"></i>{{ hotel.location }}</p>
-            <p class="card-text text-muted mb-4 flex-grow-1">{{ hotel.description }}</p>
-            
-            <button class="btn btn-outline-primary w-100 fw-bold" [routerLink]="['/rooms']" [queryParams]="{hotelId: hotel.hotel_id}">
-              View Available Rooms
-            </button>
+          <div class="card-rating">
+            <i class="bi bi-star-fill"></i>
+            <span>4.{{ (8 + i) % 10 }}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>{{ hotel.location }}</span>
+          </div>
+          <h3 class="card-title">{{ hotel.name }}</h3>
+          <p class="card-description">{{ hotel.description || 'A premier destination offering world-class amenities and unparalleled comfort.' }}</p>
+          <div class="card-footer">
+            <div class="card-tags">
+              <span class="tag">Luxury</span>
+              <span class="tag">Spa</span>
+              <span class="tag">Pool</span>
+            </div>
+            <a [routerLink]="['/hotels', hotel.hotelId]" class="btn-view">
+              View Details <i class="bi bi-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Footer Strip -->
+  <div class="hotels-footer-strip">
+    <p>Looking to manage hotels? <a routerLink="/hotel-admin">Go to Admin Panel <i class="bi bi-shield-lock"></i></a></p>
   </div>
 </div>

@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+.form-page {
+  font-family: 'Outfit', sans-serif;
+  background: #0a0a0f;
+  min-height: 100vh;
+  padding-top: 60px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 680px;
+  margin: 48px auto;
+  padding: 0 20px;
+}
+
+.form-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 24px;
+  padding: 36px 40px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+}
+
+/* ─── Header ─── */
+.form-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.btn-back {
+  width: 42px; height: 42px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 50%;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.btn-back:hover { background: rgba(255,255,255,0.13); color: #fff; }
+
+.form-title-group { display: flex; align-items: center; gap: 14px; }
+
+.form-icon {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(168,85,247,0.2));
+  border: 1px solid rgba(139,92,246,0.4);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #a855f7;
+  flex-shrink: 0;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  line-height: 1.2;
+}
+.form-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.45);
+  margin: 4px 0 0;
+}
+
+/* ─── Fetch Spinner ─── */
+.fetch-spinner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 0;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.9rem;
+}
+.loading-ring {
+  width: 28px; height: 28px;
+  border: 3px solid rgba(139,92,246,0.2);
+  border-top-color: #7c3aed;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Alerts ─── */
+.alert-success, .alert-error {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+.alert-success {
+  background: rgba(74,222,128,0.1);
+  border: 1px solid rgba(74,222,128,0.3);
+  color: #4ade80;
+}
+.alert-error {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #f87171;
+}
+
+/* ─── Form ─── */
+.hotel-form { display: flex; flex-direction: column; gap: 22px; }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.required { color: #f87171; }
+.label-hint {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.35);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-icon {
+  position: absolute;
+  left: 16px;
+  color: rgba(255,255,255,0.35);
+  font-size: 1rem;
+  pointer-events: none;
+  z-index: 1;
+}
+.textarea-icon { top: 14px; align-self: flex-start; }
+.textarea-wrapper { align-items: flex-start; }
+
+.form-input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  padding: 14px 16px 14px 44px;
+  outline: none;
+  transition: all 0.25s;
+}
+.form-input:focus {
+  border-color: rgba(139,92,246,0.6);
+  background: rgba(139,92,246,0.07);
+  box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+}
+.form-input::placeholder { color: rgba(255,255,255,0.25); }
+.form-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.input-error { border-color: rgba(239,68,68,0.5) !important; }
+
+.form-textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.6;
+  padding-top: 14px;
+}
+
+.error-msg {
+  font-size: 0.78rem;
+  color: #f87171;
+  font-weight: 500;
+}
+.char-count {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.3);
+  text-align: right;
+}
+
+/* ─── Actions ─── */
+.form-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.btn-cancel {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.65);
+  padding: 15px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.btn-cancel:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+.btn-submit {
+  flex: 2;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  border: none;
+  color: #fff;
+  padding: 15px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: all 0.3s;
+  box-shadow: 0 8px 24px rgba(124,58,237,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6d28d9, #9333ea);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(124,58,237,0.55);
+}
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.btn-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-spinner {
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ─── Admin Note ─── */
+.admin-note {
+  margin-top: 24px;
+  padding: 14px 18px;
+  background: rgba(251,191,36,0.07);
+  border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 12px;
+  font-size: 0.82rem;
+  color: rgba(251,191,36,0.8);
+}
+
+@media (max-width: 520px) {
+  .form-card { padding: 24px 20px; }
+  .form-actions { flex-direction: column; }
+  .form-title-group { flex-direction: column; align-items: flex-start; gap: 8px; }
+}

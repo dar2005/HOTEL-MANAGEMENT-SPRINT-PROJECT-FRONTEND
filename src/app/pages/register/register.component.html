@@ -24,11 +24,8 @@
               <div class="invalid-feedback">A valid email is required.</div>
             </div>
 
-            <div class="form-floating mb-3">
-              <input type="tel" class="form-control" id="phone" placeholder="Phone Number" formControlName="phone" [ngClass]="{'is-invalid': registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched}">
-              <label for="phone"><i class="bi bi-telephone me-2"></i>Phone Number</label>
-              <div class="invalid-feedback">Phone number is required.</div>
-            </div>
+
+
 
             <div class="form-floating mb-4">
               <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password" [ngClass]="{'is-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}">
