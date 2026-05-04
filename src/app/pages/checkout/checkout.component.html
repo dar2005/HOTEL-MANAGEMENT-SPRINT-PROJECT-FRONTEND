@@ -1,9 +1,9 @@
-<div class="checkout-container pt-5 mt-5 bg-light min-vh-100">
+<div class="checkout-container pt-5 mt-5 checkout-bg min-vh-100">
   <app-navbar></app-navbar>
   <div class="container pb-5">
     <div class="mb-4">
       <button class="btn btn-link text-decoration-none p-0 text-muted mb-2" routerLink="/rooms">
-        <i class="bi bi-arrow-left me-1"></i> Back to Rooms
+        <i class="bi bi-arrow-left me-1 theme-accent"></i> Back to Rooms
       </button>
       <h2 class="fw-bold">Complete your booking</h2>
     </div>
@@ -20,25 +20,25 @@
         <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
           
           <!-- Guest Details Card -->
-          <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="theme-card mb-4">
             <div class="card-body p-4">
               <h4 class="fw-bold mb-4">1. Guest Details</h4>
               
               <div class="mb-3">
                 <label class="form-label fw-semibold">Full Name</label>
-                <input type="text" class="form-control" formControlName="guestName" placeholder="John Doe" [ngClass]="{'is-invalid': checkoutForm.get('guestName')?.invalid && checkoutForm.get('guestName')?.touched}">
+                <input type="text" class="form-control theme-input" formControlName="guestName" placeholder="John Doe" [ngClass]="{'is-invalid': checkoutForm.get('guestName')?.invalid && checkoutForm.get('guestName')?.touched}">
                 <div class="invalid-feedback">Guest name is required.</div>
               </div>
 
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Email Address</label>
-                  <input type="email" class="form-control" formControlName="guestEmail" placeholder="john@example.com" [ngClass]="{'is-invalid': checkoutForm.get('guestEmail')?.invalid && checkoutForm.get('guestEmail')?.touched}">
+                  <input type="email" class="form-control theme-input" formControlName="guestEmail" placeholder="john@example.com" [ngClass]="{'is-invalid': checkoutForm.get('guestEmail')?.invalid && checkoutForm.get('guestEmail')?.touched}">
                   <div class="invalid-feedback">A valid email is required.</div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Phone Number</label>
-                  <input type="text" class="form-control" formControlName="guestPhone" placeholder="1234567890" [ngClass]="{'is-invalid': checkoutForm.get('guestPhone')?.invalid && checkoutForm.get('guestPhone')?.touched}">
+                  <input type="text" class="form-control theme-input" formControlName="guestPhone" placeholder="1234567890" [ngClass]="{'is-invalid': checkoutForm.get('guestPhone')?.invalid && checkoutForm.get('guestPhone')?.touched}">
                   <div class="invalid-feedback">A valid phone number is required.</div>
                 </div>
               </div>
@@ -46,12 +46,12 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Check-in Date</label>
-                  <input type="date" class="form-control" formControlName="checkInDate" [min]="minDate" [ngClass]="{'is-invalid': checkoutForm.get('checkInDate')?.invalid && checkoutForm.get('checkInDate')?.touched}">
+                  <input type="date" class="form-control theme-input" formControlName="checkInDate" [min]="minDate" [ngClass]="{'is-invalid': checkoutForm.get('checkInDate')?.invalid && checkoutForm.get('checkInDate')?.touched}">
                   <div class="invalid-feedback">Check-in date is required.</div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Check-out Date</label>
-                  <input type="date" class="form-control" formControlName="checkOutDate" [min]="checkoutForm.get('checkInDate')?.value || minDate" [ngClass]="{'is-invalid': checkoutForm.get('checkOutDate')?.invalid && checkoutForm.get('checkOutDate')?.touched}">
+                  <input type="date" class="form-control theme-input" formControlName="checkOutDate" [min]="checkoutForm.get('checkInDate')?.value || minDate" [ngClass]="{'is-invalid': checkoutForm.get('checkOutDate')?.invalid && checkoutForm.get('checkOutDate')?.touched}">
                   <div class="invalid-feedback">Check-out date is required.</div>
                 </div>
               </div>
@@ -59,12 +59,12 @@
           </div>
 
           <!-- Confirmation Details Card -->
-          <div class="card border-0 shadow-sm rounded-4">
+          <div class="theme-card">
             <div class="card-body p-4">
               <h4 class="fw-bold mb-4">2. Confirmation</h4>
               
-              <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
-                <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+              <div class="theme-card border-info text-info d-flex align-items-center mb-4 p-3" role="alert" style="background: rgba(168, 85, 247, 0.05) !important; border-color: rgba(168, 85, 247, 0.3) !important; color: #c4b5fd !important;">
+                <i class="bi bi-info-circle-fill fs-4 me-3 theme-accent"></i>
                 <div>
                   Payment will be handled automatically after booking confirmation.
                 </div>
@@ -72,7 +72,7 @@
 
               <div class="mb-3">
                 <label class="form-label fw-semibold">Payment Type</label>
-                <select class="form-select" formControlName="paymentType">
+                <select class="form-select theme-input" formControlName="paymentType">
                   <option value="PAY_AT_HOTEL">Pay at Hotel</option>
                   <option value="ONLINE">Online (Demo)</option>
                 </select>
@@ -81,7 +81,7 @@
           </div>
 
           <div class="mt-4">
-            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold rounded-3" [disabled]="isLoading">
+            <button type="submit" class="btn theme-btn-primary btn-lg w-100 fw-bold rounded-3" [disabled]="isLoading">
               <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
               Confirm Booking
             </button>
@@ -92,7 +92,7 @@
 
       <!-- Right Column: Order Summary -->
       <div class="col-lg-4">
-        <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 100px;">
+        <div class="theme-card sticky-top" style="top: 100px;">
           <div class="card-body p-4">
             <h5 class="fw-bold mb-4">Booking Summary</h5>
             
@@ -100,18 +100,18 @@
               <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Room" class="rounded-3" style="width: 80px; height: 80px; object-fit: cover;">
               <div class="ms-3">
                 <h6 class="fw-bold mb-1">Room {{ room.roomNumber }} - {{ room.roomType?.typeName }}</h6>
-                <p class="text-muted small mb-0"><i class="bi bi-star-fill text-warning me-1"></i> 4.8 (120 reviews)</p>
+                <p class="theme-text-muted small mb-0"><i class="bi bi-star-fill text-warning me-1"></i> 4.8 (120 reviews)</p>
               </div>
             </div>
 
             <hr class="text-muted">
 
             <div class="d-flex justify-content-between mb-2">
-              <span class="text-muted">${{ room.roomType?.pricePerNight }} x {{ nights }} night(s)</span>
+              <span class="theme-text-muted">${{ room.roomType?.pricePerNight }} x {{ nights }} night(s)</span>
               <span class="fw-semibold">${{ (room.roomType?.pricePerNight || 0) * nights }}</span>
             </div>
             <div class="d-flex justify-content-between mb-3">
-              <span class="text-muted">Taxes & Fees</span>
+              <span class="theme-text-muted">Taxes & Fees</span>
               <span class="fw-semibold text-success">Included</span>
             </div>
 
@@ -119,7 +119,7 @@
 
             <div class="d-flex justify-content-between align-items-center">
               <span class="fw-bold fs-5">Total Price</span>
-              <span class="fw-bold fs-4 text-primary">${{ totalPrice }}</span>
+              <span class="fw-bold fs-4 theme-accent">${{ totalPrice }}</span>
             </div>
           </div>
         </div>

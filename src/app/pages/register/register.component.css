@@ -1,6 +1,6 @@
 .auth-container {
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: transparent; /* inherit theme-bg */
   padding: 2rem;
 }
 
@@ -8,11 +8,33 @@
   max-width: 900px;
   width: 100%;
   overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
 }
 
-.bg-image {
-  background-image: url('https://images.unsplash.com/photo-1542314831-c6a4d27160c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
-  background-size: cover;
-  background-position: center;
-  min-height: 100%;
+.img-container {
+  position: relative;
+  height: 100%;
+  min-height: 550px;
+}
+
+.img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(10, 10, 15, 0.8), rgba(124, 58, 237, 0.4));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+  color: white;
+}
+
+.img-overlay h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.img-overlay p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
 }

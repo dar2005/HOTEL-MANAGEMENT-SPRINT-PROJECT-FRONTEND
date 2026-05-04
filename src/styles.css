@@ -1,1 +1,150 @@
-/* You can add global styles to this file, and also import other style files */
+/* Base Global Styles */
+body {
+  background: #0a0a0f;
+  color: #e8e8ef;
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+}
+
+/* Theme Utilities */
+.theme-bg {
+  background: #0a0a0f !important;
+  color: #e8e8ef !important;
+}
+
+.theme-bg-secondary {
+  background: #0d0d14 !important;
+}
+
+.theme-text-primary {
+  color: #fff !important;
+}
+
+.theme-text-muted {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
+.theme-accent {
+  color: #a855f7 !important;
+}
+
+.theme-card {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 20px !important;
+  color: #e8e8ef !important;
+  backdrop-filter: blur(10px);
+}
+
+.theme-card-hover {
+  transition: all 0.3s ease;
+}
+
+.theme-card-hover:hover {
+  transform: translateY(-5px);
+  border-color: rgba(139, 92, 246, 0.5) !important;
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15) !important;
+}
+
+.theme-input {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #fff !important;
+}
+
+.theme-input:focus {
+  border-color: #a855f7 !important;
+  box-shadow: 0 0 0 0.25rem rgba(168, 85, 247, 0.25) !important;
+}
+
+.theme-input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.theme-input option {
+  background-color: #0d0d14 !important;
+  color: #fff !important;
+}
+
+.theme-btn-primary {
+  background: linear-gradient(135deg, #7c3aed, #a855f7) !important;
+  color: #fff !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.theme-btn-primary:hover {
+  background: linear-gradient(135deg, #6d28d9, #9333ea) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4) !important;
+}
+
+.theme-sidebar {
+  background: #0d0d14 !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.theme-sidebar .nav-link {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.theme-sidebar .nav-link:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.theme-sidebar .nav-link.active {
+  background: rgba(139, 92, 246, 0.15) !important;
+  color: #c4b5fd !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+.theme-navbar {
+  background: rgba(10, 10, 15, 0.9) !important;
+  backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.theme-table {
+  color: #e8e8ef !important;
+  --bs-table-bg: transparent;
+  --bs-table-color: #e8e8ef;
+  --bs-table-border-color: rgba(255, 255, 255, 0.08);
+  --bs-table-hover-bg: rgba(255, 255, 255, 0.03);
+  --bs-table-hover-color: #fff;
+}
+
+.theme-table th {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  border-bottom-width: 1px;
+}
+
+.theme-table td {
+  border-bottom-width: 1px;
+  vertical-align: middle;
+}
+
+/* Fix text-muted to work on dark bg */
+.text-muted {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* Fix bg-light if used anywhere to be slightly lighter dark */
+.bg-light {
+  background-color: #0d0d14 !important;
+}
+
+/* Override Bootstrap Primary colors globally */
+.text-primary {
+  color: #a855f7 !important;
+}
+
+.bg-primary {
+  background-color: #7c3aed !important;
+}
+
+/* Custom Typography Utilities */
+.tracking-wide {
+  letter-spacing: 0.05em !important;
+}

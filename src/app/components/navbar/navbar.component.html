@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top px-4 py-2 bg-primary shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top px-4 py-2 theme-navbar shadow-sm">
   <div class="container-fluid">
     <!-- Brand -->
     <a class="navbar-brand d-flex align-items-center" routerLink="/">
@@ -29,12 +29,10 @@
           <a class="nav-link text-white px-3" routerLink="/reviews" routerLinkActive="active">Reviews</a>
         </li>
         
-        <!-- Authenticated Center Links -->
-        <ng-container *ngIf="isAuthenticated$ | async">
-          <li class="nav-item">
-            <a class="nav-link text-white px-3" routerLink="/dashboard" routerLinkActive="active">My Bookings</a>
-          </li>
-        </ng-container>
+        <!-- Authenticated Center Links (Now Always Visible) -->
+        <li class="nav-item">
+          <a class="nav-link text-white px-3" routerLink="/dashboard" routerLinkActive="active">My Bookings</a>
+        </li>
       </ul>
 
       <!-- Right Action Items -->

@@ -1,4 +1,4 @@
-<div class="rooms-container pt-5 mt-5">
+<div class="rooms-container pt-5 mt-5 theme-bg">
   <app-navbar></app-navbar>
 
   <div class="container pb-5">
@@ -12,52 +12,52 @@
     <div class="row">
       <!-- Sidebar Filters -->
       <div class="col-lg-3 mb-4">
-        <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top: 100px; z-index: 1;">
+        <div class="theme-card sticky-top theme-card-hover" style="top: 100px; z-index: 1;">
           <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h5 class="fw-bold m-0"><i class="bi bi-funnel me-2"></i>Filters</h5>
-              <button class="btn btn-sm btn-link text-primary text-decoration-none p-0" (click)="resetFilters()">Clear</button>
+              <button class="btn btn-sm btn-link theme-accent text-decoration-none p-0 fw-semibold" (click)="resetFilters()">Clear</button>
             </div>
             
             <hr>
 
             <!-- Availability Filter -->
             <div class="mb-4">
-              <h6 class="fw-bold mb-3">Availability</h6>
+              <h6 class="fw-bold mb-3 text-uppercase small tracking-wide theme-accent">Availability</h6>
               <div class="form-check mb-2">
                 <input class="form-check-input" type="radio" name="availability" id="availAll" value="ALL" [(ngModel)]="filterMode" (change)="applyFilters()">
-                <label class="form-check-label text-muted" for="availAll">All Rooms</label>
+                <label class="form-check-label theme-text-muted" for="availAll">All Rooms</label>
               </div>
               <div class="form-check mb-2">
                 <input class="form-check-input" type="radio" name="availability" id="availAvail" value="AVAILABLE" [(ngModel)]="filterMode" (change)="applyFilters()">
-                <label class="form-check-label text-muted" for="availAvail">Available Now</label>
+                <label class="form-check-label theme-text-muted" for="availAvail">Available Now</label>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="radio" name="availability" id="availUnavail" value="UNAVAILABLE" [(ngModel)]="filterMode" (change)="applyFilters()">
-                <label class="form-check-label text-muted" for="availUnavail">Unavailable</label>
+                <label class="form-check-label theme-text-muted" for="availUnavail">Unavailable</label>
               </div>
             </div>
 
             <!-- Room Type Filter -->
             <div class="mb-4">
-              <h6 class="fw-bold mb-3">Room Type Name</h6>
-              <input type="text" class="form-control" placeholder="e.g. Deluxe, Suite" [(ngModel)]="filterType" (keyup.enter)="applyFilters()">
-              <small class="text-muted mt-1 d-block">Press enter to apply</small>
+              <h6 class="fw-bold mb-3 text-uppercase small tracking-wide theme-accent">Room Type Name</h6>
+              <input type="text" class="form-control theme-input py-2" placeholder="e.g. Deluxe, Suite" [(ngModel)]="filterType" (keyup.enter)="applyFilters()">
+              <small class="theme-text-muted mt-2 d-block">Press enter to apply</small>
             </div>
 
             <!-- Price Range Filter -->
             <div class="mb-4">
-              <h6 class="fw-bold mb-3">Price Range ($)</h6>
+              <h6 class="fw-bold mb-3 text-uppercase small tracking-wide theme-accent">Price Range ($)</h6>
               <div class="row g-2 align-items-center">
                 <div class="col-5">
-                  <input type="number" class="form-control" placeholder="Min" [(ngModel)]="minPrice">
+                  <input type="number" class="form-control theme-input py-2" placeholder="Min" [(ngModel)]="minPrice">
                 </div>
-                <div class="col-2 text-center text-muted">-</div>
+                <div class="col-2 text-center theme-text-muted">-</div>
                 <div class="col-5">
-                  <input type="number" class="form-control" placeholder="Max" [(ngModel)]="maxPrice">
+                  <input type="number" class="form-control theme-input py-2" placeholder="Max" [(ngModel)]="maxPrice">
                 </div>
               </div>
-              <button class="btn btn-primary w-100 mt-3" (click)="applyFilters()">Apply Price Filter</button>
+              <button class="btn theme-btn-primary w-100 py-2 mt-4 fw-bold rounded-3" (click)="applyFilters()">Apply Filters</button>
             </div>
 
           </div>
@@ -74,17 +74,17 @@
         </div>
 
         <!-- Empty State -->
-        <div *ngIf="!isLoading && rooms.length === 0" class="text-center py-5 my-5 bg-light rounded-4">
+        <div *ngIf="!isLoading && rooms.length === 0" class="text-center py-5 my-5 theme-bg-secondary rounded-4">
           <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
           <h4 class="fw-bold">No Rooms Found</h4>
           <p class="text-muted">We couldn't find any rooms matching your current filters.</p>
-          <button class="btn btn-primary mt-2" (click)="resetFilters()">Clear Filters</button>
+          <button class="btn theme-btn-primary mt-2" (click)="resetFilters()">Clear Filters</button>
         </div>
 
         <!-- Grid -->
         <div class="row row-cols-1 row-cols-md-2 g-4" *ngIf="!isLoading && rooms.length > 0">
           <div class="col" *ngFor="let room of rooms">
-            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden room-card">
+            <div class="theme-card h-100 overflow-hidden room-card theme-card-hover">
               
               <div class="room-img-container position-relative">
                 <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Room Image" style="height: 220px; object-fit: cover;">
@@ -96,8 +96,11 @@
               
               <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span class="text-uppercase text-primary fw-bold small">Room {{ room.roomNumber }} - {{ room.roomType?.typeName }}</span>
-                  <h5 class="card-title fw-bold mb-0 text-success">${{ room.roomType?.pricePerNight }}/night</h5>
+                  <span class="text-uppercase theme-accent fw-bold small tracking-wide">Room {{ room.roomNumber }} - {{ room.roomType?.typeName }}</span>
+                  <div class="text-end">
+                    <span class="fs-4 fw-bolder text-white">${{ room.roomType?.pricePerNight }}</span>
+                    <span class="theme-text-muted small">/night</span>
+                  </div>
                 </div>
                 
                 <p class="card-text text-muted mb-3">{{ room.roomType?.description || 'Experience luxury and comfort in our exquisitely designed room.' }}</p>
@@ -109,8 +112,8 @@
                 </div>
               </div>
               
-              <div class="card-footer bg-white border-0 pt-0 pb-3 px-4">
-                <button class="btn btn-primary w-100 fw-bold" [routerLink]="['/checkout', room.roomId]" [disabled]="!room.isAvailable">
+              <div class="card-footer bg-transparent border-0 pt-0 pb-3 px-4">
+                <button class="btn theme-btn-primary w-100 py-2 fw-bold rounded-3" [routerLink]="['/checkout', room.roomId]" [disabled]="!room.isAvailable">
                   Book Now
                 </button>
               </div>
