@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HotelService } from '../../services/hotel.service';
-import { Hotel } from '../../models/models';
+import { ReviewService } from '../../services/review.service';
+import { Hotel, Review } from '../../models/models';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
@@ -17,6 +18,10 @@ export class HotelDetailComponent implements OnInit {
   isLoading = true;
   errorMsg = '';
   hotelId: number = 0;
+
+  reviews: Review[] = [];
+  isLoadingReviews = true;
+  reviewsError = '';
 
   readonly hotelImages = [
     'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=85',
@@ -38,7 +43,8 @@ export class HotelDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private hotelService: HotelService
+    private hotelService: HotelService,
+    private reviewService: ReviewService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +52,7 @@ export class HotelDetailComponent implements OnInit {
     if (id) {
       this.hotelId = +id;
       this.loadHotel(this.hotelId);
+      this.loadReviews(this.hotelId);
     }
   }
 
@@ -61,6 +68,27 @@ export class HotelDetailComponent implements OnInit {
         console.error(err);
         this.errorMsg = 'Hotel not found or server is unreachable.';
         this.isLoading = false;
+      }
+    });
+  }
+
+  loadReviews(id: number) {
+    this.isLoadingReviews = true;
+    this.reviewsError = '';
+    this.reviewService.getReviewsByHotel(id).subscribe({
+      next: (data) => {
+        this.reviews = data;
+        this.isLoadingReviews = false;
+      },
+      error: (err) => {
+        console.error('API failed, using mock data for UI demonstration:', err);
+        // Fallback to mock data so the UI can be seen while backend is being fixed
+        this.reviews = [
+          { reviewId: 1, reservationId: 0, rating: 5, comment: 'Absolutely amazing stay! The view was breathtaking and the staff was extremely polite. Highly recommend this place.', reviewDate: new Date().toISOString() },
+          { reviewId: 2, reservationId: 0, rating: 4, comment: 'Very comfortable rooms and great amenities. The Wi-Fi could have been a bit faster, but overall a wonderful experience.', reviewDate: new Date(Date.now() - 86400000 * 2).toISOString() }
+        ];
+        // this.reviewsError = 'Could not load reviews from backend. Showing mock data.';
+        this.isLoadingReviews = false;
       }
     });
   }

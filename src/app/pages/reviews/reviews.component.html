@@ -1,49 +1,79 @@
-<div class="reviews-container pt-5 mt-5">
+<div class="reviews-page">
   <app-navbar></app-navbar>
 
-  <div class="container py-5 mt-5">
-    <div class="row mb-5 text-center">
-      <div class="col-12">
-        <h2 class="fw-bold display-5 mb-3">Guest Experiences</h2>
-        <p class="text-muted lead mx-auto" style="max-width: 600px;">Read honest reviews from our verified guests and discover why they chose our platform.</p>
+  <div class="reviews-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Guest Experiences</h1>
+      <p class="hero-subtitle">Read honest reviews from our verified guests and discover why they chose our platform.</p>
+      
+      <div class="avg-rating-badge" *ngIf="averageRating > 0">
+        <i class="bi bi-star-fill text-warning"></i>
+        <span>{{ averageRating | number:'1.1-1' }}</span>
+        <small>Platform Average</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-xl reviews-main">
+    
+    <!-- Controls Section -->
+    <div class="controls-card">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" [(ngModel)]="searchKeyword" (keyup.enter)="searchReviews()" placeholder="Search in reviews..." class="search-input">
+        <button class="btn-search" (click)="searchReviews()">Search</button>
+      </div>
+
+      <div class="filters-group">
+        <button class="filter-btn" [class.active]="currentFilter === 'All'" (click)="loadAllReviews()">All</button>
+        <button class="filter-btn" [class.active]="currentFilter === 'Latest'" (click)="loadLatestReviews()">Latest</button>
+        <button class="filter-btn" [class.active]="currentFilter === '5 Stars'" (click)="filterByRating(5)">5 <i class="bi bi-star-fill"></i></button>
+        <button class="filter-btn" [class.active]="currentFilter === '4 Stars'" (click)="filterByRating(4)">4 <i class="bi bi-star-fill"></i></button>
+        <button class="filter-btn" [class.active]="currentFilter === '3 Stars'" (click)="filterByRating(3)">3 <i class="bi bi-star-fill"></i></button>
       </div>
     </div>
 
+    <div class="filter-status">
+      Showing: <strong>{{ currentFilter }}</strong> ({{ reviews.length }} results)
+    </div>
+
     <!-- Loading State -->
-    <div *ngIf="isLoading" class="text-center py-5 my-5">
-      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
-      <h5 class="mt-4 text-muted">Loading reviews...</h5>
+    <div *ngIf="isLoading" class="state-center">
+      <div class="loading-ring"></div>
+      <p>Loading reviews...</p>
     </div>
 
     <!-- Empty State -->
-    <div *ngIf="!isLoading && reviews.length === 0" class="text-center py-5 my-5 bg-light rounded-4 shadow-sm">
-      <i class="bi bi-chat-square-quote fs-1 text-muted mb-3 d-block"></i>
-      <h4 class="fw-bold">No Reviews Yet</h4>
-      <p class="text-muted">Be the first to stay and leave a review!</p>
+    <div *ngIf="!isLoading && reviews.length === 0" class="state-center">
+      <i class="bi bi-chat-square-quote text-muted" style="font-size: 3rem;"></i>
+      <h4 class="mt-3">No Reviews Found</h4>
+      <p class="text-muted">Try a different filter or search term.</p>
+      <button class="btn-reset" (click)="loadAllReviews()">Clear Filters</button>
     </div>
 
-    <!-- Reviews Masonry / Grid -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" *ngIf="!isLoading && reviews.length > 0">
-      <div class="col" *ngFor="let review of reviews">
-        <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div class="d-flex text-warning">
-              <i class="bi bi-star-fill" *ngFor="let _ of [].constructor(review.rating)"></i>
-            </div>
-            <span class="text-muted small">{{ review.reviewDate | date:'mediumDate' }}</span>
+    <!-- Reviews Grid -->
+    <div class="reviews-grid" *ngIf="!isLoading && reviews.length > 0">
+      <div class="review-card" *ngFor="let review of reviews">
+        <div class="review-header">
+          <div class="review-avatar">
+            <i class="bi bi-person-circle"></i>
           </div>
-          
-          <p class="fst-italic text-secondary mb-4 flex-grow-1">"{{ review.comment }}"</p>
-          
-          <div class="d-flex align-items-center mt-auto">
-            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-              <i class="bi bi-person-fill"></i>
-            </div>
-            <div>
-              <h6 class="fw-bold mb-0">Guest #{{ review.reservationId }}</h6>
-              <span class="text-muted small">Verified Stay</span>
-            </div>
+          <div class="review-meta">
+            <strong>Guest #{{ review.reviewId }}</strong>
+            <span class="review-date">{{ review.reviewDate | date:'mediumDate' }}</span>
           </div>
+          <div class="review-rating">
+            <i class="bi bi-star-fill text-warning" *ngFor="let _ of [].constructor(review.rating)"></i>
+            <i class="bi bi-star text-muted" *ngFor="let _ of [].constructor(5 - review.rating)"></i>
+          </div>
+        </div>
+        <div class="review-body">
+          <i class="bi bi-quote quote-icon"></i>
+          <p>"{{ review.comment }}"</p>
+        </div>
+        <div class="review-footer">
+          <span class="verified-badge"><i class="bi bi-check-circle-fill"></i> Verified Stay</span>
         </div>
       </div>
     </div>

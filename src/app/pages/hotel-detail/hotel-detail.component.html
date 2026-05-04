@@ -74,6 +74,44 @@
             </div>
           </div>
 
+          <!-- Reviews Section -->
+          <div class="detail-card reviews-card">
+            <h2 class="section-title"><span class="title-accent">✦</span> Guest Reviews</h2>
+            
+            <div *ngIf="isLoadingReviews" class="state-center-small">
+              <div class="loading-ring"></div>
+            </div>
+            
+            <div *ngIf="!isLoadingReviews && reviewsError" class="error-text">
+              {{ reviewsError }}
+            </div>
+
+            <div *ngIf="!isLoadingReviews && !reviewsError && reviews.length === 0" class="empty-state">
+              No reviews yet for this hotel.
+            </div>
+
+            <div *ngIf="!isLoadingReviews && reviews.length > 0" class="reviews-list">
+              <div class="review-item" *ngFor="let review of reviews">
+                <div class="review-header">
+                  <div class="review-avatar">
+                    <i class="bi bi-person-circle"></i>
+                  </div>
+                  <div class="review-meta">
+                    <strong>Guest</strong>
+                    <span class="review-date">{{ review.reviewDate | date:'longDate' }}</span>
+                  </div>
+                  <div class="review-rating">
+                    <i class="bi bi-star-fill text-warning" *ngFor="let star of [].constructor(review.rating)"></i>
+                    <i class="bi bi-star text-muted" *ngFor="let star of [].constructor(5 - review.rating)"></i>
+                  </div>
+                </div>
+                <div class="review-body">
+                  {{ review.comment }}
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <!-- Right Column — Booking Card -->
