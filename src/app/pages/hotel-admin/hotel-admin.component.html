@@ -1,0 +1,191 @@
+<div class="admin-page">
+  <app-navbar></app-navbar>
+
+  <div class="admin-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <i class="bi bi-building-fill-gear"></i>
+        <span>Hotel Admin</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-link active" routerLink="/hotel-admin">
+          <i class="bi bi-grid-1x2-fill"></i> Dashboard
+        </a>
+        <a class="nav-link" routerLink="/hotels">
+          <i class="bi bi-eye-fill"></i> Public View
+        </a>
+        <a class="nav-link" (click)="navigateToCreate()">
+          <i class="bi bi-plus-circle-fill"></i> Add Hotel
+        </a>
+        <a class="nav-link" routerLink="/">
+          <i class="bi bi-house-fill"></i> Home
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="stat-box">
+          <span class="stat-label">Total Hotels</span>
+          <span class="stat-value">{{ totalHotels }}</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+
+      <!-- Top Bar -->
+      <div class="admin-topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">Hotel Management</h1>
+          <p class="page-sub">Manage all hotel records — create, view, edit, and delete.</p>
+        </div>
+        <div class="topbar-right">
+          <button class="btn-refresh" (click)="refresh()" title="Refresh">
+            <i class="bi bi-arrow-clockwise"></i>
+          </button>
+          <button class="btn-add" (click)="navigateToCreate()">
+            <i class="bi bi-plus-lg me-2"></i>Add Hotel
+          </button>
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div *ngIf="successMsg" class="alert alert-success">
+        <i class="bi bi-check-circle-fill me-2"></i>{{ successMsg }}
+        <button class="alert-close" (click)="successMsg = ''"><i class="bi bi-x"></i></button>
+      </div>
+      <div *ngIf="errorMsg" class="alert alert-error">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMsg }}
+        <button class="alert-close" (click)="errorMsg = ''"><i class="bi bi-x"></i></button>
+      </div>
+
+      <!-- Search & Filter Bar -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <i class="bi bi-search"></i>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="filterHotels()"
+            placeholder="Search by name, location or ID..."
+            class="search-input"
+          />
+          <button *ngIf="searchTerm" class="clear-search" (click)="clearFilter()">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="filter-info">
+          Showing <strong>{{ filteredHotels.length }}</strong> of <strong>{{ totalHotels }}</strong> hotels
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="isLoading" class="loading-state">
+        <div class="loading-ring"></div>
+        <p>Loading hotel records...</p>
+      </div>
+
+      <!-- Empty -->
+      <div *ngIf="!isLoading && filteredHotels.length === 0 && !errorMsg" class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <h4>No hotels found</h4>
+        <p *ngIf="searchTerm">No results for "{{ searchTerm }}". <a (click)="clearFilter()" class="link">Clear search</a></p>
+        <p *ngIf="!searchTerm">No hotels registered yet. <a (click)="navigateToCreate()" class="link">Create one now</a></p>
+      </div>
+
+      <!-- Hotels Table -->
+      <div class="table-card" *ngIf="!isLoading && filteredHotels.length > 0">
+        <div class="table-responsive">
+          <table class="hotels-table">
+            <thead>
+              <tr>
+                <th>Hotel</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let hotel of filteredHotels; let i = index" class="table-row">
+                <td class="td-img">
+                  <img [src]="getHotelImage(i)" [alt]="hotel.name" class="table-img" />
+                </td>
+                <td class="td-id">
+                  <span class="id-badge">#{{ hotel.hotelId }}</span>
+                </td>
+                <td class="td-name">
+                  <strong>{{ hotel.name }}</strong>
+                </td>
+                <td class="td-location">
+                  <i class="bi bi-geo-alt-fill me-1 text-purple"></i>{{ hotel.location }}
+                </td>
+                <td class="td-desc">
+                  <span class="desc-truncate">{{ hotel.description || '—' }}</span>
+                </td>
+                <td class="td-actions">
+                  <div class="action-btns">
+                    <button class="btn-action btn-view" (click)="viewHotel(hotel)" title="View Details">
+                      <i class="bi bi-eye-fill"></i>
+                    </button>
+                    <button class="btn-action btn-edit" (click)="navigateToEdit(hotel)" title="Edit Hotel">
+                      <i class="bi bi-pencil-fill"></i>
+                    </button>
+                    <button class="btn-action btn-delete" (click)="confirmDelete(hotel)" title="Delete Hotel">
+                      <i class="bi bi-trash3-fill"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Hotel Cards Grid (mobile friendly) -->
+      <div class="hotel-cards-grid" *ngIf="!isLoading && filteredHotels.length > 0">
+        <div class="mini-card" *ngFor="let hotel of filteredHotels; let i = index">
+          <img [src]="getHotelImage(i)" [alt]="hotel.name" class="mini-card-img" />
+          <div class="mini-card-body">
+            <span class="mini-id">#{{ hotel.hotelId }}</span>
+            <h4 class="mini-name">{{ hotel.name }}</h4>
+            <p class="mini-location"><i class="bi bi-geo-alt-fill"></i> {{ hotel.location }}</p>
+            <p class="mini-desc">{{ hotel.description || 'No description provided.' }}</p>
+            <div class="mini-actions">
+              <button (click)="viewHotel(hotel)" class="mini-btn mini-view"><i class="bi bi-eye"></i> View</button>
+              <button (click)="navigateToEdit(hotel)" class="mini-btn mini-edit"><i class="bi bi-pencil"></i> Edit</button>
+              <button (click)="confirmDelete(hotel)" class="mini-btn mini-delete"><i class="bi bi-trash3"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteModal" (click)="cancelDelete()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-icon">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+      </div>
+      <h3 class="modal-title">Delete Hotel?</h3>
+      <p class="modal-body">
+        Are you sure you want to delete
+        <strong>"{{ hotelToDelete?.name }}"</strong>
+        (ID: {{ hotelToDelete?.hotelId }})?
+        This action cannot be undone.
+      </p>
+      <div class="modal-actions">
+        <button class="modal-cancel" (click)="cancelDelete()">Cancel</button>
+        <button class="modal-confirm" (click)="executeDelete()" [disabled]="isDeleting">
+          <span *ngIf="!isDeleting"><i class="bi bi-trash3 me-1"></i>Delete</span>
+          <span *ngIf="isDeleting">Deleting...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,138 @@
+<div class="form-page">
+  <app-navbar></app-navbar>
+
+  <div class="form-container">
+    <div class="form-card">
+
+      <!-- Header -->
+      <div class="form-header">
+        <button class="btn-back" (click)="goBack()">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+        <div class="form-title-group">
+          <div class="form-icon">
+            <i class="bi {{ isEditMode ? 'bi-pencil-square' : 'bi-building-add' }}"></i>
+          </div>
+          <div>
+            <h1 class="form-title">{{ isEditMode ? 'Edit Hotel' : 'Add New Hotel' }}</h1>
+            <p class="form-subtitle">{{ isEditMode ? 'Update hotel information below.' : 'Fill in the details to register a new hotel.' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fetching spinner for edit mode -->
+      <div *ngIf="isFetching" class="fetch-spinner">
+        <div class="loading-ring"></div>
+        <span>Loading hotel data...</span>
+      </div>
+
+      <!-- Alerts -->
+      <div *ngIf="successMsg" class="alert-success">
+        <i class="bi bi-check-circle-fill me-2"></i>{{ successMsg }}
+      </div>
+      <div *ngIf="errorMsg" class="alert-error">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMsg }}
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="hotelForm" (ngSubmit)="onSubmit()" *ngIf="!isFetching" class="hotel-form">
+
+        <!-- Hotel ID (create only) -->
+        <div class="form-group">
+          <label class="form-label" for="hotelId">
+            Hotel ID <span class="required">*</span>
+            <span class="label-hint">{{ isEditMode ? '(cannot be changed)' : '(unique numeric identifier)' }}</span>
+          </label>
+          <div class="input-wrapper">
+            <i class="bi bi-hash input-icon"></i>
+            <input
+              id="hotelId"
+              type="number"
+              formControlName="hotelId"
+              class="form-input"
+              [class.input-error]="hotelForm.get('hotelId')?.touched && hotelForm.get('hotelId')?.invalid"
+              placeholder="e.g. 101"
+            />
+          </div>
+          <span class="error-msg" *ngIf="getError('hotelId')">{{ getError('hotelId') }}</span>
+        </div>
+
+        <!-- Name -->
+        <div class="form-group">
+          <label class="form-label" for="name">Hotel Name <span class="required">*</span></label>
+          <div class="input-wrapper">
+            <i class="bi bi-building input-icon"></i>
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              class="form-input"
+              [class.input-error]="hotelForm.get('name')?.touched && hotelForm.get('name')?.invalid"
+              placeholder="e.g. The Grand Horizon"
+            />
+          </div>
+          <span class="error-msg" *ngIf="getError('name')">{{ getError('name') }}</span>
+          <span class="char-count">{{ hotelForm.get('name')?.value?.length || 0 }} / 50</span>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+          <label class="form-label" for="location">Location <span class="required">*</span></label>
+          <div class="input-wrapper">
+            <i class="bi bi-geo-alt input-icon"></i>
+            <input
+              id="location"
+              type="text"
+              formControlName="location"
+              class="form-input"
+              [class.input-error]="hotelForm.get('location')?.touched && hotelForm.get('location')?.invalid"
+              placeholder="e.g. Mumbai, India"
+            />
+          </div>
+          <span class="error-msg" *ngIf="getError('location')">{{ getError('location') }}</span>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="form-label" for="description">Description</label>
+          <div class="input-wrapper textarea-wrapper">
+            <i class="bi bi-card-text input-icon textarea-icon"></i>
+            <textarea
+              id="description"
+              formControlName="description"
+              class="form-input form-textarea"
+              [class.input-error]="hotelForm.get('description')?.touched && hotelForm.get('description')?.invalid"
+              placeholder="Brief description of the hotel (max 200 characters)..."
+              rows="4"
+            ></textarea>
+          </div>
+          <span class="error-msg" *ngIf="getError('description')">{{ getError('description') }}</span>
+          <span class="char-count">{{ hotelForm.get('description')?.value?.length || 0 }} / 200</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="goBack()">Cancel</button>
+          <button type="submit" class="btn-submit" [disabled]="isLoading">
+            <span *ngIf="!isLoading">
+              <i class="bi {{ isEditMode ? 'bi-check2-circle' : 'bi-plus-circle' }} me-2"></i>
+              {{ isEditMode ? 'Update Hotel' : 'Create Hotel' }}
+            </span>
+            <span *ngIf="isLoading" class="btn-loading">
+              <span class="btn-spinner"></span>
+              {{ isEditMode ? 'Updating...' : 'Creating...' }}
+            </span>
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Note for unauthenticated users -->
+      <div class="admin-note">
+        <i class="bi bi-shield-lock-fill me-2"></i>
+        Creating or editing hotels requires <strong>ADMIN</strong> privileges. Please ensure you are logged in.
+      </div>
+
+    </div>
+  </div>
+</div>

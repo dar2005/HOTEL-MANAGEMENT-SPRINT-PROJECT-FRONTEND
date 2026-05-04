@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Hotel } from '../models/models';
+import { Hotel, HotelRequest } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -20,15 +20,29 @@ export class HotelService {
     return this.http.get<Hotel>(`${this.apiUrl}/${id}`);
   }
 
-  createHotel(hotel: Hotel): Observable<Hotel> {
-    return this.http.post<Hotel>(this.apiUrl, hotel);
+  /**
+   * POST /hotels/{id}  — the backend uses the path {id} as the hotelId to create
+   */
+  createHotel(id: number, dto: HotelRequest): Observable<Hotel> {
+    return this.http.post<Hotel>(`${this.apiUrl}/${id}`, dto);
   }
 
-  updateHotel(id: number, hotel: Hotel): Observable<Hotel> {
-    return this.http.put<Hotel>(`${this.apiUrl}/${id}`, hotel);
+  updateHotel(id: number, dto: HotelRequest): Observable<Hotel> {
+    return this.http.put<Hotel>(`${this.apiUrl}/${id}`, dto);
   }
 
-  deleteHotel(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  searchByLocation(location: string): Observable<Hotel[]> {
+    const params = new HttpParams().set('location', location);
+    return this.http.get<Hotel[]>(`${this.apiUrl}/search/location`, { params });
+  }
+
+  searchByName(name: string): Observable<Hotel[]> {
+    const params = new HttpParams().set('name', name);
+    return this.http.get<Hotel[]>(`${this.apiUrl}/search/name`, { params });
+  }
+
+  searchByLocationAndName(location: string, name: string): Observable<Hotel[]> {
+    const params = new HttpParams().set('location', location).set('name', name);
+    return this.http.get<Hotel[]>(`${this.apiUrl}/search`, { params });
   }
 }

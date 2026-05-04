@@ -18,6 +18,7 @@
     "@angular/platform-browser": "^17.3.0",
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
+    "bcryptjs": "^3.0.3",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "ngx-toastr": "^18.0.0",
