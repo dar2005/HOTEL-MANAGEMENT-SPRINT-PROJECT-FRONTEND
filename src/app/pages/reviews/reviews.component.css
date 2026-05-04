@@ -1,0 +1,283 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+.reviews-page {
+  font-family: 'Outfit', sans-serif;
+  background: #0a0a0f;
+  min-height: 100vh;
+  color: #e8e8ef;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Hero ─── */
+.reviews-hero {
+  position: relative;
+  margin-top: 60px; /* Adjust for navbar */
+  padding: 60px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(10,10,15,1) 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 50% 0%, rgba(139,92,246,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+.hero-subtitle {
+  color: rgba(255,255,255,0.6);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.avg-rating-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(251,191,36,0.3);
+  padding: 10px 20px;
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.avg-rating-badge span {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+}
+.avg-rating-badge small {
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ─── Main Content ─── */
+.reviews-main {
+  padding: 40px 20px 80px;
+}
+
+/* ─── Controls ─── */
+.controls-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50px;
+  padding: 5px 5px 5px 20px;
+  flex-grow: 1;
+  max-width: 400px;
+}
+.search-box i {
+  color: rgba(255,255,255,0.5);
+  font-size: 1.1rem;
+}
+.search-input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 10px 15px;
+  width: 100%;
+  outline: none;
+  font-family: 'Outfit', sans-serif;
+}
+.search-input::placeholder { color: rgba(255,255,255,0.3); }
+.btn-search {
+  background: #7c3aed;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-search:hover { background: #6d28d9; }
+
+.filters-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.filter-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+.filter-btn.active {
+  background: rgba(139,92,246,0.2);
+  border-color: rgba(139,92,246,0.5);
+  color: #c4b5fd;
+}
+.filter-btn.active i { color: #fbbf24; }
+
+.filter-status {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.95rem;
+  margin-bottom: 30px;
+}
+.filter-status strong { color: #fff; }
+
+/* ─── Grid ─── */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.review-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, background 0.2s;
+}
+.review-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(139,92,246,0.3);
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.review-avatar i {
+  font-size: 2.5rem;
+  color: #a855f7;
+}
+.review-meta {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.review-meta strong {
+  font-size: 1.05rem;
+  color: #fff;
+}
+.review-date {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+}
+.review-rating {
+  display: flex;
+  gap: 2px;
+  font-size: 0.85rem;
+}
+
+.review-body {
+  position: relative;
+  flex-grow: 1;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.quote-icon {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  font-size: 3rem;
+  color: rgba(139,92,246,0.1);
+  z-index: -1;
+}
+
+.review-footer {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #4ade80;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(74,222,128,0.1);
+  padding: 6px 12px;
+  border-radius: 50px;
+}
+
+/* ─── States ─── */
+.state-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  color: rgba(255,255,255,0.55);
+}
+.loading-ring {
+  width: 48px; height: 48px;
+  border: 4px solid rgba(139,92,246,0.2);
+  border-top-color: #7c3aed;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.btn-reset {
+  background: rgba(139,92,246,0.15);
+  border: 1px solid rgba(139,92,246,0.4);
+  color: #c4b5fd;
+  padding: 10px 24px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  margin-top: 16px;
+  transition: all 0.2s;
+}
+.btn-reset:hover { background: rgba(139,92,246,0.25); }
+
+@media (max-width: 768px) {
+  .controls-card { flex-direction: column; align-items: stretch; }
+  .search-box { max-width: none; }
+  .filters-group { justify-content: center; }
+}
