@@ -5,11 +5,12 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { AuthService } from '../../services/auth.service';
 import { ReservationService } from '../../services/reservation.service';
 import { Reservation } from '../../models/models';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule, SidebarComponent],
+  imports: [CommonModule, RouterModule, SidebarComponent, NavbarComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

@@ -4,11 +4,12 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { ReservationService } from '../../services/reservation.service';
 import { Reservation } from '../../models/models';
 import { AuthService } from '../../services/auth.service';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, SidebarComponent],
+  imports: [CommonModule, SidebarComponent, NavbarComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
