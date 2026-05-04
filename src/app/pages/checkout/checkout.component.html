@@ -25,19 +25,19 @@
               
               <div class="mb-3">
                 <label class="form-label fw-semibold">Full Name</label>
-                <input type="text" class="form-control" formControlName="guest_name" placeholder="John Doe" [ngClass]="{'is-invalid': checkoutForm.get('guest_name')?.invalid && checkoutForm.get('guest_name')?.touched}">
+                <input type="text" class="form-control" formControlName="guestName" placeholder="John Doe" [ngClass]="{'is-invalid': checkoutForm.get('guestName')?.invalid && checkoutForm.get('guestName')?.touched}">
                 <div class="invalid-feedback">Guest name is required.</div>
               </div>
 
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Check-in Date</label>
-                  <input type="date" class="form-control" formControlName="check_in_date" [ngClass]="{'is-invalid': checkoutForm.get('check_in_date')?.invalid && checkoutForm.get('check_in_date')?.touched}">
+                  <input type="date" class="form-control" formControlName="checkInDate" [ngClass]="{'is-invalid': checkoutForm.get('checkInDate')?.invalid && checkoutForm.get('checkInDate')?.touched}">
                   <div class="invalid-feedback">Check-in date is required.</div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Check-out Date</label>
-                  <input type="date" class="form-control" formControlName="check_out_date" [ngClass]="{'is-invalid': checkoutForm.get('check_out_date')?.invalid && checkoutForm.get('check_out_date')?.touched}">
+                  <input type="date" class="form-control" formControlName="checkOutDate" [ngClass]="{'is-invalid': checkoutForm.get('checkOutDate')?.invalid && checkoutForm.get('checkOutDate')?.touched}">
                   <div class="invalid-feedback">Check-out date is required.</div>
                 </div>
               </div>
@@ -101,7 +101,7 @@
             <div class="d-flex mb-4">
               <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Room" class="rounded-3" style="width: 80px; height: 80px; object-fit: cover;">
               <div class="ms-3">
-                <h6 class="fw-bold mb-1">Room {{ room.room_number }}</h6>
+                <h6 class="fw-bold mb-1">Room {{ room.roomNumber }} - {{ room.roomType?.typeName }}</h6>
                 <p class="text-muted small mb-0"><i class="bi bi-star-fill text-warning me-1"></i> 4.8 (120 reviews)</p>
               </div>
             </div>
@@ -109,8 +109,8 @@
             <hr class="text-muted">
 
             <div class="d-flex justify-content-between mb-2">
-              <span class="text-muted">${{ room.roomType?.price_per_night }} x {{ nights }} night(s)</span>
-              <span class="fw-semibold">${{ (room.roomType?.price_per_night || 0) * nights }}</span>
+              <span class="text-muted">${{ room.roomType?.pricePerNight }} x {{ nights }} night(s)</span>
+              <span class="fw-semibold">${{ (room.roomType?.pricePerNight || 0) * nights }}</span>
             </div>
             <div class="d-flex justify-content-between mb-3">
               <span class="text-muted">Taxes & Fees</span>

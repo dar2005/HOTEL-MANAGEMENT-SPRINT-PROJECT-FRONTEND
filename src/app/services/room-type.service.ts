@@ -20,6 +20,10 @@ export class RoomTypeService {
     return this.http.get<RoomType>(`${this.apiUrl}/${id}`);
   }
 
+  getRoomTypeByName(name: string): Observable<RoomType> {
+    return this.http.get<RoomType>(`${this.apiUrl}/name/${name}`);
+  }
+
   createRoomType(roomType: RoomType): Observable<RoomType> {
     return this.http.post<RoomType>(this.apiUrl, roomType);
   }
