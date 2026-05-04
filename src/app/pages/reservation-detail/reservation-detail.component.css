@@ -1,0 +1,14 @@
+.card {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+strong {
+  display: block;
+  color: #495057;
+  margin-bottom: 0.35rem;
+}
+
+p {
+  margin-bottom: 0.25rem;
+}

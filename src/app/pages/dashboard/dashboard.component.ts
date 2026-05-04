@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { ReservationService } from '../../services/reservation.service';
 import { Reservation } from '../../models/models';
@@ -20,7 +21,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private reservationService: ReservationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -43,5 +45,18 @@ export class DashboardComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  goToDetails(reservation: Reservation): void {
+    const reservationId = reservation.reservationId ?? (reservation as any).id;
+    if (!reservationId) {
+      return;
+    }
+    this.router.navigate(['/dashboard/reservation', reservationId]);
+  }
+
+  getTotalPaid(reservation: Reservation): string {
+    const paid = reservation.totalPrice ?? (reservation as any).total_price ?? 0;
+    return `$${paid}`;
   }
 }
