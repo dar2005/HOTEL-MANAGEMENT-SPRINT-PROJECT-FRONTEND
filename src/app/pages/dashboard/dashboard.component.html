@@ -4,11 +4,11 @@
   <app-sidebar [role]="'USER'"></app-sidebar>
 
   <!-- Main Content -->
-  <div class="flex-grow-1 overflow-auto bg-light">
+  <div class="flex-grow-1 overflow-auto theme-bg">
     <div class="p-5">
       <h2 class="fw-bold mb-4">My Bookings</h2>
 
-      <div class="card border-0 shadow-sm rounded-4">
+      <div class="theme-card">
         <div class="card-body p-0">
           
           <div *ngIf="isLoading" class="text-center py-5">
@@ -24,8 +24,8 @@
           </div>
 
           <div class="table-responsive" *ngIf="!isLoading && reservations.length > 0">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light">
+            <table class="table theme-table align-middle mb-0">
+              <thead>
                 <tr>
                   <th scope="col" class="ps-4">ID</th>
                   <th scope="col">Guest Name</th>

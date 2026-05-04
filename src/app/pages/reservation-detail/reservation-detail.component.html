@@ -2,14 +2,14 @@
 <div class="d-flex" style="height: 100vh; padding-top: 60px;">
   <app-sidebar [role]="'USER'"></app-sidebar>
 
-  <div class="flex-grow-1 overflow-auto bg-light">
+  <div class="flex-grow-1 overflow-auto theme-bg">
     <div class="p-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h2 class="fw-bold mb-1">Reservation Details</h2>
-          <p class="text-muted mb-0">Review the full booking information for your reservation.</p>
+          <h2 class="fw-bold mb-1 text-white">Reservation Details</h2>
+          <p class="theme-text-muted mb-0">Review the full booking information for your reservation.</p>
         </div>
-        <a routerLink="/dashboard" class="btn btn-outline-primary">Back to bookings</a>
+        <a routerLink="/dashboard" class="btn theme-btn-primary rounded-3 px-4">Back to bookings</a>
       </div>
 
       <div *ngIf="isLoading" class="text-center py-5">
@@ -21,37 +21,44 @@
         {{ errorMessage }}
       </div>
 
-      <div *ngIf="!isLoading && reservation" class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-4">
-          <div class="row gy-3">
+      <div *ngIf="!isLoading && reservation" class="theme-card position-relative overflow-hidden" style="border: 1px solid rgba(168, 85, 247, 0.3) !important; box-shadow: 0 10px 40px rgba(168, 85, 247, 0.1) !important;">
+        <!-- Status Badge -->
+        <div class="position-absolute top-0 end-0 m-4">
+          <span class="badge bg-success rounded-pill px-3 py-2 text-uppercase tracking-wide shadow-sm"><i class="bi bi-check-circle-fill me-2"></i>Confirmed</span>
+        </div>
+        
+        <div class="card-body p-5">
+          <h4 class="fw-bold mb-4 text-white border-bottom border-secondary pb-3" style="border-color: rgba(255,255,255,0.1) !important;"><i class="bi bi-receipt me-2 theme-accent"></i>Booking Summary</h4>
+          
+          <div class="row gy-4 mt-2">
             <div class="col-md-4">
-              <strong>Reservation ID</strong>
-              <p class="mb-0">#{{ reservation.reservationId }}</p>
+              <strong class="theme-text-muted small text-uppercase tracking-wide"><i class="bi bi-hash me-2 theme-accent"></i>Reservation ID</strong>
+              <p class="mb-0 fs-5 fw-semibold text-white mt-1">#{{ reservation.reservationId }}</p>
             </div>
             <div class="col-md-4">
-              <strong>Guest Name</strong>
-              <p class="mb-0">{{ reservation.guestName }}</p>
+              <strong class="theme-text-muted small text-uppercase tracking-wide"><i class="bi bi-person me-2 theme-accent"></i>Guest Name</strong>
+              <p class="mb-0 fs-5 fw-semibold text-white mt-1">{{ reservation.guestName }}</p>
             </div>
             <div class="col-md-4">
-              <strong>Guest Email</strong>
-              <p class="mb-0">{{ reservation.guestEmail || 'N/A' }}</p>
+              <strong class="theme-text-muted small text-uppercase tracking-wide"><i class="bi bi-envelope me-2 theme-accent"></i>Guest Email</strong>
+              <p class="mb-0 fs-5 fw-semibold text-white mt-1">{{ reservation.guestEmail || 'N/A' }}</p>
             </div>
             <div class="col-md-4">
-              <strong>Guest Phone</strong>
-              <p class="mb-0">{{ reservation.guestPhone || 'N/A' }}</p>
+              <strong class="theme-text-muted small text-uppercase tracking-wide"><i class="bi bi-telephone me-2 theme-accent"></i>Guest Phone</strong>
+              <p class="mb-0 fs-5 fw-semibold text-white mt-1">{{ reservation.guestPhone || 'N/A' }}</p>
             </div>
             <div class="col-md-4">
-              <strong>Room ID</strong>
-              <p class="mb-0">Room {{ reservation.roomId }}</p>
+              <strong class="theme-text-muted small text-uppercase tracking-wide"><i class="bi bi-door-closed me-2 theme-accent"></i>Room ID</strong>
+              <p class="mb-0 fs-5 fw-semibold text-white mt-1">Room {{ reservation.roomId }}</p>
             </div>
 
             <div class="col-md-4">
-              <strong>Check In</strong>
-              <p class="mb-0">{{ reservation.checkInDate | date:'mediumDate' }}</p>
+              <strong class="theme-text-muted small text-uppercase tracking-wide"><i class="bi bi-calendar-check me-2 theme-accent"></i>Check In</strong>
+              <p class="mb-0 fs-5 fw-semibold text-white mt-1">{{ reservation.checkInDate | date:'mediumDate' }}</p>
             </div>
             <div class="col-md-4">
-              <strong>Check Out</strong>
-              <p class="mb-0">{{ reservation.checkOutDate | date:'mediumDate' }}</p>
+              <strong class="theme-text-muted small text-uppercase tracking-wide"><i class="bi bi-calendar-x me-2 theme-accent"></i>Check Out</strong>
+              <p class="mb-0 fs-5 fw-semibold text-white mt-1">{{ reservation.checkOutDate | date:'mediumDate' }}</p>
             </div>
           </div>
         </div>

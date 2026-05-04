@@ -1,24 +1,24 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-white border-end shadow-sm h-100" style="width: 280px;">
+<div class="d-flex flex-column flex-shrink-0 p-3 theme-sidebar h-100" style="width: 280px;">
 
   <!-- Admin Links -->
   <ul class="nav nav-pills flex-column mb-auto" *ngIf="role === 'ADMIN'">
     <li class="nav-item">
-      <a routerLink="/admin" routerLinkActive="active" class="nav-link link-dark fw-semibold mb-1">
+      <a routerLink="/admin" routerLinkActive="active" class="nav-link fw-semibold mb-1">
         <i class="bi bi-speedometer2 me-2"></i> Overview
       </a>
     </li>
     <li>
-      <a routerLink="/rooms" routerLinkActive="active" class="nav-link link-dark fw-semibold mb-1">
+      <a routerLink="/rooms" routerLinkActive="active" class="nav-link fw-semibold mb-1">
         <i class="bi bi-door-open me-2"></i> Manage Rooms
       </a>
     </li>
     <li>
-      <a routerLink="/hotel-admin" routerLinkActive="active" class="nav-link link-dark fw-semibold mb-1">
+      <a routerLink="/hotel-admin" routerLinkActive="active" class="nav-link fw-semibold mb-1">
         <i class="bi bi-building me-2"></i> Hotels
       </a>
     </li>
     <li>
-      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link link-dark fw-semibold mb-1">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link fw-semibold mb-1">
         <i class="bi bi-card-checklist me-2"></i> All Bookings
       </a>
     </li>
@@ -27,12 +27,12 @@
   <!-- User Links -->
   <ul class="nav nav-pills flex-column mb-auto" *ngIf="role === 'USER'">
     <li class="nav-item">
-      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link link-dark fw-semibold mb-1">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link fw-semibold mb-1">
         <i class="bi bi-calendar2-check me-2"></i> My Bookings
       </a>
     </li>
     <li>
-      <a routerLink="/profile" routerLinkActive="active" class="nav-link link-dark fw-semibold mb-1">
+      <a routerLink="/profile" routerLinkActive="active" class="nav-link fw-semibold mb-1">
         <i class="bi bi-person me-2"></i> My Profile
       </a>
     </li>
@@ -40,7 +40,7 @@
 
   <hr>
   <div class="dropdown">
-    <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle px-2" data-bs-toggle="dropdown" aria-expanded="false">
+    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle px-2" data-bs-toggle="dropdown" aria-expanded="false">
       <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
         <i class="bi bi-person-fill"></i>
       </div>

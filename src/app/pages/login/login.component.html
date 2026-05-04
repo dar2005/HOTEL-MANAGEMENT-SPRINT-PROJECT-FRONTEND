@@ -1,10 +1,14 @@
 <app-navbar></app-navbar>
-<div class="auth-container d-flex align-items-center justify-content-center">
-  <div class="auth-card card shadow-lg border-0 rounded-4">
+<div class="auth-container theme-bg d-flex align-items-center justify-content-center pt-5 mt-5 pb-5">
+  <div class="auth-card theme-card border-0 rounded-4">
     <div class="row g-0">
       <!-- Image Side -->
-      <div class="col-md-6 d-none d-sm-block p-0">
-        <img src="https://picsum.photos/seed/luxuryhotel/800/1200" alt="Luxury Hotel" class="img-fluid rounded-start-4 h-100 w-100" style="object-fit: cover; min-height: 400px;">
+      <div class="col-md-6 d-none d-sm-block p-0 img-container">
+        <img src="https://picsum.photos/seed/luxuryhotel/800/1200" alt="Luxury Hotel" class="img-fluid rounded-start-4 h-100 w-100" style="object-fit: cover;">
+        <div class="img-overlay rounded-start-4">
+          <h2>Your Journey Begins Here</h2>
+          <p>Discover the world's most luxurious accommodations at your fingertips.</p>
+        </div>
       </div>
       <!-- Form Side -->
       <div class="col-md-6">
@@ -16,19 +20,19 @@
 
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="username" placeholder="Username" formControlName="username" [ngClass]="{'is-invalid': loginForm.get('username')?.invalid && loginForm.get('username')?.touched}">
-              <label for="username"><i class="bi bi-person me-2"></i>Username</label>
+            <div class="mb-4">
+              <label for="username" class="form-label fw-semibold text-white"><i class="bi bi-person me-2 theme-accent"></i>Username</label>
+              <input type="text" class="form-control theme-input py-2" id="username" placeholder="Enter your username" formControlName="username" [ngClass]="{'is-invalid': loginForm.get('username')?.invalid && loginForm.get('username')?.touched}">
               <div class="invalid-feedback">Username is required.</div>
             </div>
 
-            <div class="form-floating mb-4">
-              <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password" [ngClass]="{'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}">
-              <label for="password"><i class="bi bi-lock me-2"></i>Password</label>
+            <div class="mb-5">
+              <label for="password" class="form-label fw-semibold text-white"><i class="bi bi-lock me-2 theme-accent"></i>Password</label>
+              <input type="password" class="form-control theme-input py-2" id="password" placeholder="Enter your password" formControlName="password" [ngClass]="{'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}">
               <div class="invalid-feedback">Password is required.</div>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold fs-5 mb-3" [disabled]="isLoading">
+            <button type="submit" class="btn theme-btn-primary w-100 py-3 fw-bold fs-5 mb-4 rounded-3" [disabled]="isLoading">
               <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
               Sign In
             </button>
@@ -36,7 +40,7 @@
           </form>
           
           <div class="text-center mt-3">
-            <p class="text-muted mb-0">Don't have an account? <a routerLink="/register" class="text-primary text-decoration-none fw-bold">Sign up</a></p>
+            <p class="text-muted mb-0">Don't have an account? <a routerLink="/register" class="theme-accent text-decoration-none fw-bold">Sign up</a></p>
           </div>
           
         </div>
