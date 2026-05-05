@@ -49,6 +49,16 @@ export class CheckoutComponent implements OnInit {
     this.roomId = Number(this.route.snapshot.paramMap.get('roomId'));
     this.fetchRoomDetails();
 
+    // Pre-fill user data to ensure tracking matches
+    const currentUsername = localStorage.getItem('username') || '';
+    const currentEmail = localStorage.getItem('email') || '';
+    if (currentUsername || currentEmail) {
+      this.checkoutForm.patchValue({
+        guestName: currentUsername,
+        guestEmail: currentEmail
+      });
+    }
+
     // Calculate price dynamically
     this.checkoutForm.valueChanges.subscribe(val => {
       if (val.checkInDate && val.checkOutDate && this.room) {
@@ -91,6 +101,9 @@ export class CheckoutComponent implements OnInit {
         return;
       }
 
+      const currentUserIdStr = localStorage.getItem('userId');
+      const userIdVal = currentUserIdStr && !isNaN(Number(currentUserIdStr)) ? Number(currentUserIdStr) : undefined;
+
       const reservation: Reservation = {
         guestName: formValue.guestName,
         guestEmail: formValue.guestEmail,
@@ -99,15 +112,27 @@ export class CheckoutComponent implements OnInit {
         checkOutDate: formValue.checkOutDate,
         roomId: this.roomId,
         room: { roomId: this.roomId } as Room,
-        totalPrice: this.totalPrice
+        totalPrice: this.totalPrice,
+        userId: userIdVal
       };
 
       // 1. Create Reservation
       this.reservationService.createReservation(reservation).subscribe({
         next: (res: any) => {
+          // Track this booking explicitly in local storage as a foolproof fallback
+          const resId = res.reservationId || res.id;
+          if (resId) {
+            const existingIdsStr = localStorage.getItem('my_booking_ids');
+            const existingIds = existingIdsStr ? JSON.parse(existingIdsStr) : [];
+            if (!existingIds.includes(resId)) {
+              existingIds.push(resId);
+              localStorage.setItem('my_booking_ids', JSON.stringify(existingIds));
+            }
+          }
+
           // 2. Mock Payment Call using DTO assumptions
           const paymentDto = {
-            reservationId: res.reservationId || res.id,
+            reservationId: resId,
             amount: this.totalPrice,
             paymentMethod: formValue.paymentType
           };

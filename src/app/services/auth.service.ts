@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, BehaviorSubject } from 'rxjs';
+import { Observable, tap, BehaviorSubject, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoginRequest, RegisterRequest, AuthResponse } from '../models/models';
 
@@ -17,6 +17,52 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(request: LoginRequest): Observable<AuthResponse> {
+    // In non-production builds allow convenient dev shortcuts; otherwise always call backend
+    // COMMENTED OUT to prevent invalid token issues with real backend
+    /*
+    if (!environment.production) {
+      // Development shortcut: if logging in with admin/admin123 locally, bypass backend
+      if (request.username === 'admin' && request.password === 'admin123') {
+        const devResp: AuthResponse = { token: 'dev-admin-token', role: 'ADMIN' };
+        return of(devResp).pipe(
+          tap(response => {
+            if (response && response.token) {
+              this.setToken(response.token);
+              if (response.role) this.setRole(response.role);
+
+              // Save username locally
+              if (request.username) {
+                localStorage.setItem('username', request.username);
+              }
+
+              this.isAuthenticatedSubject.next(true);
+            }
+          })
+        );
+      }
+
+      // Development shortcut: for any other username/password, treat as regular USER locally
+      if (request.username && request.password) {
+        const devResp: AuthResponse = { token: 'dev-user-token', role: 'USER' };
+        return of(devResp).pipe(
+          tap(response => {
+            if (response && response.token) {
+              this.setToken(response.token);
+              if (response.role) this.setRole(response.role);
+
+              if (request.username) {
+                localStorage.setItem('username', request.username);
+              }
+
+              this.isAuthenticatedSubject.next(true);
+            }
+          })
+        );
+      }
+    }
+    */
+
+    // Default: call backend login
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, request).pipe(
       tap(response => {
         if (response && response.token) {
@@ -44,6 +90,32 @@ export class AuthService {
               const year = new Date(payload.iat * 1000).getFullYear().toString();
               localStorage.setItem('memberSince', year);
             }
+            if (payload.userId) {
+              localStorage.setItem('userId', payload.userId.toString());
+            } else if (payload.id) {
+              localStorage.setItem('userId', payload.id.toString());
+            }
+            
+            // Extract role from JWT
+            let extractedRole = null;
+            if (payload.role) {
+              extractedRole = payload.role;
+            } else if (payload.roles) {
+              extractedRole = Array.isArray(payload.roles) ? payload.roles[0] : payload.roles;
+            } else if (payload.authorities) {
+              const auth = Array.isArray(payload.authorities) ? payload.authorities[0] : payload.authorities;
+              extractedRole = auth.authority || auth;
+            }
+            
+            if (extractedRole) {
+              const upperRole = typeof extractedRole === 'string' ? extractedRole.toUpperCase() : '';
+              if (upperRole.includes('ADMIN')) {
+                this.setRole('ADMIN');
+              } else {
+                this.setRole('USER');
+              }
+            }
+
           } catch (e) {
             // JWT decode failed – silently ignore, username already set above
           }

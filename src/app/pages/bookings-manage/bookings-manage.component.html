@@ -1,0 +1,162 @@
+<div class="admin-page">
+  <app-navbar></app-navbar>
+
+  <div class="admin-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <i class="bi bi-calendar2-check-fill"></i>
+        <span>Booking Admin</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-link" routerLink="/admin">
+          <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+        <a class="nav-link" routerLink="/hotel-admin">
+          <i class="bi bi-building"></i> Hotels
+        </a>
+        <a class="nav-link" routerLink="/rooms-manage">
+          <i class="bi bi-door-open"></i> Rooms
+        </a>
+        <a class="nav-link active" routerLink="/bookings-manage">
+          <i class="bi bi-calendar-check"></i> Bookings
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="stat-box">
+          <span class="stat-label">Total Bookings</span>
+          <span class="stat-value">{{ filteredBookings.length }}</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+
+      <!-- Top Bar -->
+      <div class="admin-topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">Booking Management</h1>
+          <p class="page-sub">Monitor all reservations across your properties.</p>
+        </div>
+        <div class="topbar-right">
+          <button class="btn-add" (click)="exportBookings()">
+            <i class="bi bi-download me-2"></i>Export CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <div class="search-box" style="flex: 2;">
+          <i class="bi bi-search"></i>
+          <input type="text" class="search-input" placeholder="Search Guest Name, Email, or Phone..." [(ngModel)]="searchTerm">
+        </div>
+        <select class="filter-select" [(ngModel)]="filterStatus">
+          <option value="all">All Statuses</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="completed">Completed</option>
+        </select>
+        <select class="filter-select" [(ngModel)]="filterHotel">
+          <option value="all">All Hotels</option>
+          <option *ngFor="let hotel of hotels" [value]="hotel.hotelId">
+            {{ hotel.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-bar" style="margin-top: -8px;">
+        <div class="d-flex align-items-center gap-3">
+          <label style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Check-In From:</label>
+          <input type="date" class="filter-date" [(ngModel)]="filterDateStart">
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <label style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">Check-Out To:</label>
+          <input type="date" class="filter-date" [(ngModel)]="filterDateEnd">
+        </div>
+        <button class="btn-reset ms-auto" (click)="resetFilters()">
+          <i class="bi bi-arrow-clockwise me-2"></i>Reset Filters
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="isLoading" class="loading-state">
+        <div class="loading-ring"></div>
+        <p>Loading reservations...</p>
+      </div>
+
+      <!-- Bookings Table -->
+      <div class="table-card" *ngIf="!isLoading">
+        <div class="table-header">
+          Showing {{ filteredBookings.length }} Reservation(s)
+        </div>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Guest</th>
+                <th>Hotel</th>
+                <th>Dates</th>
+                <th>Nights</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let booking of filteredBookings" class="table-row">
+                <td style="color: #a855f7; font-weight: 700;">#{{ booking.reservationId }}</td>
+                <td>
+                  <div class="guest-info">
+                    <span class="guest-name">{{ booking.guestName }}</span>
+                    <span class="guest-email">{{ booking.guestEmail }}</span>
+                  </div>
+                </td>
+                <td style="color: rgba(255,255,255,0.7);">{{ getHotelName(booking.hotel?.hotelId) }}</td>
+                <td>
+                  <div style="font-size: 0.85rem;">
+                    <div><strong style="color: #4ade80;">IN:</strong> {{ booking.checkInDate | date:'MMM d, y' }}</div>
+                    <div style="margin-top: 4px;"><strong style="color: #f87171;">OUT:</strong> {{ booking.checkOutDate | date:'MMM d, y' }}</div>
+                  </div>
+                </td>
+                <td>
+                  <span class="nights-badge">
+                    {{ calculateNights(booking.checkInDate, booking.checkOutDate) }}
+                  </span>
+                </td>
+                <td style="font-weight: 700; font-size: 1rem;">${{ booking.totalPrice | number:'1.2-2' }}</td>
+                <td>
+                  <span class="status-badge" [ngClass]="(booking.status || 'CONFIRMED').toLowerCase()">
+                    {{ booking.status || 'CONFIRMED' }}
+                  </span>
+                </td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-action btn-view" title="View Details">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn-action btn-edit" title="Mark Confirmed" (click)="updateBookingStatus(booking.reservationId || 0, 'CONFIRMED')">
+                      <i class="bi bi-check-lg"></i>
+                    </button>
+                    <button class="btn-action btn-delete" title="Cancel Booking" (click)="cancelBooking(booking.reservationId || 0)" *ngIf="booking.status !== 'CANCELLED'">
+                      <i class="bi bi-x-circle"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredBookings.length === 0">
+                <td colspan="8" class="text-center py-5" style="color: rgba(255,255,255,0.4);">
+                  No reservations found matching your criteria.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>

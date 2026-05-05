@@ -37,7 +37,33 @@ export class DashboardComponent implements OnInit {
   fetchMyBookings() {
     this.reservationService.getAllReservations().subscribe({
       next: (res) => {
-        this.reservations = res;
+        const role = this.authService.getRole();
+        if (role === 'ADMIN' || role === 'ROLE_ADMIN') {
+          // Admin can see all bookings
+          this.reservations = res;
+        } else {
+          // User should only see their own bookings
+          const currentUsername = (this.authService.getUsername() || '').toLowerCase();
+          const currentEmail = (localStorage.getItem('email') || '').toLowerCase();
+          const currentUserId = localStorage.getItem('userId');
+          const myBookingIdsStr = localStorage.getItem('my_booking_ids');
+          const myBookingIds = myBookingIdsStr ? JSON.parse(myBookingIdsStr) : [];
+          
+          this.reservations = res.filter(r => {
+            const resId = r.reservationId || (r as any).id;
+            if (resId && myBookingIds.includes(resId)) {
+              return true;
+            }
+            if (currentUserId && r.userId && r.userId.toString() === currentUserId) {
+              return true;
+            }
+            const gName = (r.guestName || '').toLowerCase();
+            const gEmail = (r.guestEmail || '').toLowerCase();
+            // Match by username or email, or if they typed their username inside the guest name field
+            return (currentUsername && (gName === currentUsername || gName.includes(currentUsername))) || 
+                   (currentEmail && gEmail === currentEmail);
+          });
+        }
         this.isLoading = false;
       },
       error: (err) => {

@@ -10,17 +10,17 @@
         <span>Hotel Admin</span>
       </div>
       <nav class="sidebar-nav">
+        <a class="nav-link" routerLink="/admin">
+          <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
         <a class="nav-link active" routerLink="/hotel-admin">
-          <i class="bi bi-grid-1x2-fill"></i> Dashboard
+          <i class="bi bi-building"></i> Hotels
         </a>
-        <a class="nav-link" routerLink="/hotels">
-          <i class="bi bi-eye-fill"></i> Public View
+        <a class="nav-link" routerLink="/rooms-manage">
+          <i class="bi bi-door-open"></i> Rooms
         </a>
-        <a class="nav-link" (click)="navigateToCreate()">
-          <i class="bi bi-plus-circle-fill"></i> Add Hotel
-        </a>
-        <a class="nav-link" routerLink="/">
-          <i class="bi bi-house-fill"></i> Home
+        <a class="nav-link" routerLink="/bookings-manage">
+          <i class="bi bi-calendar-check"></i> Bookings
         </a>
       </nav>
       <div class="sidebar-footer">

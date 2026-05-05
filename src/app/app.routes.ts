@@ -14,6 +14,10 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReservationDetailComponent } from './pages/reservation-detail/reservation-detail.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { HotelsManageComponent } from './pages/hotels-manage/hotels-manage.component';
+import { RoomsManageComponent } from './pages/rooms-manage/rooms-manage.component';
+import { BookingsManageComponent } from './pages/bookings-manage/bookings-manage.component';
+import { PaymentsManageComponent } from './pages/payments-manage/payments-manage.component';
 import { authGuard } from './guards/auth.guard';
 import { adminGuard } from './guards/admin.guard';
 
@@ -26,9 +30,9 @@ export const routes: Routes = [
   // ─── Hotel Routes ───────────────────────────────────────────────
   { path: 'hotels', component: HotelsComponent },
   { path: 'hotels/:id', component: HotelDetailComponent },
-  { path: 'hotel-admin', component: HotelAdminComponent, canActivate: [authGuard] },
-  { path: 'hotel-form', component: HotelFormComponent, canActivate: [authGuard] },
-  { path: 'hotel-form/:id', component: HotelFormComponent, canActivate: [authGuard] },
+  { path: 'hotel-admin', component: HotelAdminComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'hotel-form', component: HotelFormComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'hotel-form/:id', component: HotelFormComponent, canActivate: [authGuard, adminGuard] },
   // ────────────────────────────────────────────────────────────────
 
   { path: 'reviews', component: ReviewsComponent },
@@ -37,6 +41,14 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'dashboard/reservation/:id', component: ReservationDetailComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+  
+  // ─── Admin Routes ───────────────────────────────────────────────
   { path: 'admin', component: AdminComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'hotels-manage', component: HotelsManageComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'rooms-manage', component: RoomsManageComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'bookings-manage', component: BookingsManageComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'payments-manage', component: PaymentsManageComponent, canActivate: [authGuard, adminGuard] },
+  // ────────────────────────────────────────────────────────────────
+  
   { path: '**', redirectTo: '' }
 ];

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Room } from '../models/models';
+import { Room, RoomStatusUpdate } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -53,4 +53,20 @@ export class RoomService {
   deleteRoom(id: number): Observable<string> {
     return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
   }
+
+  updateRoom(id: number, room: Room): Observable<Room> {
+    return this.http.put<Room>(`${this.apiUrl}/${id}`, room);
+  }
+
+  // Admin: Bulk update room status
+  bulkUpdateRoomStatus(update: RoomStatusUpdate): Observable<any> {
+    return this.http.post(`${this.apiUrl}/bulk-update-status`, update);
+  }
+
+  // Admin: Get rooms by hotel
+  getRoomsByHotel(hotelId: number): Observable<Room[]> {
+    const params = new HttpParams().set('hotelId', hotelId.toString());
+    return this.http.get<Room[]>(`${this.apiUrl}/hotel`, { params });
+  }
 }
+

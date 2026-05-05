@@ -31,6 +31,15 @@ export class HotelService {
     return this.http.put<Hotel>(`${this.apiUrl}/${id}`, dto);
   }
 
+  deleteHotel(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  toggleHotelStatus(id: number, isActive: boolean): Observable<Hotel> {
+    const params = new HttpParams().set('isActive', isActive.toString());
+    return this.http.put<Hotel>(`${this.apiUrl}/${id}/status`, {}, { params });
+  }
+
   searchByLocation(location: string): Observable<Hotel[]> {
     const params = new HttpParams().set('location', location);
     return this.http.get<Hotel[]>(`${this.apiUrl}/search/location`, { params });
@@ -45,4 +54,16 @@ export class HotelService {
     const params = new HttpParams().set('location', location).set('name', name);
     return this.http.get<Hotel[]>(`${this.apiUrl}/search`, { params });
   }
+
+  // Admin: Get active/inactive hotels
+  getActiveHotels(): Observable<Hotel[]> {
+    const params = new HttpParams().set('isActive', 'true');
+    return this.http.get<Hotel[]>(`${this.apiUrl}/filter`, { params });
+  }
+
+  getInactiveHotels(): Observable<Hotel[]> {
+    const params = new HttpParams().set('isActive', 'false');
+    return this.http.get<Hotel[]>(`${this.apiUrl}/filter`, { params });
+  }
 }
+
