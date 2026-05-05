@@ -4,9 +4,12 @@ import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
+import { AuthService } from '../services/auth.service';
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('token');
   const router = inject(Router);
+  const authService = inject(AuthService);
   
   let authReq = req;
   if (token) {
@@ -17,11 +20,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 || error.status === 403) {
+      if (error.status === 401) {
         // Token is expired or invalid
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
-        localStorage.removeItem('username');
+        authService.logout();
         router.navigate(['/login']);
       }
       return throwError(() => error);

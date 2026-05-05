@@ -31,7 +31,7 @@ export class ReservationDetailComponent implements OnInit {
       return;
     }
 
-    this.reservationService.getReservationById(id).subscribe({
+    this.reservationService.getMyReservationById(id).subscribe({
       next: (res) => {
         this.reservation = res;
         this.isLoading = false;

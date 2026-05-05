@@ -106,7 +106,7 @@
           </div>
           <p class="fst-italic text-muted">"{{ review.comment }}"</p>
           <hr class="w-25 mx-auto">
-          <h6 class="fw-bold mb-0">Guest #{{ review.reservationId }}</h6>
+          <h6 class="fw-bold mb-0">{{ review.reviewerName || ('Guest #' + review.reservationId) }}</h6>
         </div>
       </div>
     </div>

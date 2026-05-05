@@ -20,6 +20,14 @@ export class ReviewService {
     return this.http.get<Review>(`${this.apiUrl}/${id}`);
   }
 
+  createReview(review: Pick<Review, 'reservationId' | 'rating' | 'comment'>): Observable<Review> {
+    return this.http.post<Review>(this.apiUrl, review);
+  }
+
+  deleteReview(id: number): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
+  }
+
   getReviewsByHotel(hotelId: number): Observable<Review[]> {
     return this.http.get<Review[]>(`${this.apiUrl}/hotel/${hotelId}`);
   }

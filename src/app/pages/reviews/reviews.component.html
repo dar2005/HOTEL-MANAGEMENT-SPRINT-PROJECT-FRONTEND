@@ -60,7 +60,7 @@
             <i class="bi bi-person-circle"></i>
           </div>
           <div class="review-meta">
-            <strong>Guest #{{ review.reviewId }}</strong>
+            <strong>{{ review.reviewerName || ('Guest #' + review.reviewId) }}</strong>
             <span class="review-date">{{ review.reviewDate | date:'mediumDate' }}</span>
           </div>
           <div class="review-rating">

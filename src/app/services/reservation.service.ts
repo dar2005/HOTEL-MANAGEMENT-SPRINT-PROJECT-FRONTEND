@@ -16,6 +16,18 @@ export class ReservationService {
     return this.http.get<Reservation[]>(this.apiUrl);
   }
 
+  getMyReservations(): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(`${this.apiUrl}/my`);
+  }
+
+  getMyReservationById(id: number): Observable<Reservation> {
+    return this.http.get<Reservation>(`${this.apiUrl}/my/${id}`);
+  }
+
+  getReservationsByGuestName(guestName: string): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(`${this.apiUrl}/guest/${guestName}`);
+  }
+
   getReservationById(id: number): Observable<Reservation> {
     return this.http.get<Reservation>(`${this.apiUrl}/${id}`);
   }

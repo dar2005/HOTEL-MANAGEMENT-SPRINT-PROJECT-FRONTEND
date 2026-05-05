@@ -92,18 +92,25 @@ export class HotelAdminComponent implements OnInit {
     this.showDeleteModal = false;
   }
 
-  // NOTE: The backend HotelController does NOT expose a DELETE endpoint.
-  // We show a UI message explaining this limitation.
   executeDelete() {
     if (!this.hotelToDelete) return;
     this.isDeleting = true;
-    // Simulate a 1s delay then show the backend limitation message
-    setTimeout(() => {
-      this.isDeleting = false;
-      this.showDeleteModal = false;
-      this.errorMsg = `Delete operation is not exposed by the backend API for Hotel ID ${this.hotelToDelete?.hotelId}. The backend HotelController has no DELETE endpoint.`;
-      this.hotelToDelete = null;
-    }, 800);
+    this.hotelService.deleteHotel(this.hotelToDelete.hotelId!).subscribe({
+      next: () => {
+        this.isDeleting = false;
+        this.showDeleteModal = false;
+        this.successMsg = 'Hotel deleted successfully.';
+        this.hotelToDelete = null;
+        this.loadHotels();
+      },
+      error: (err) => {
+        console.error(err);
+        this.isDeleting = false;
+        this.showDeleteModal = false;
+        this.errorMsg = 'Could not delete hotel.';
+        this.hotelToDelete = null;
+      }
+    });
   }
 
   viewHotel(hotel: Hotel) {

@@ -22,11 +22,13 @@ export class AuthService {
         if (response && response.token) {
           this.setToken(response.token);
           if (response.role) this.setRole(response.role);
+          if (response.username) localStorage.setItem('username', response.username);
+          if (response.email) localStorage.setItem('email', response.email);
 
           // Save username from the login request
-          if (request.username) {
+          if (!response.username && request.username) {
             localStorage.setItem('username', request.username);
-          } else if (request.email) {
+          } else if (!response.username && request.email) {
             // Use part before @ as display name
             localStorage.setItem('username', request.email.split('@')[0]);
           }
@@ -65,6 +67,9 @@ export class AuthService {
     localStorage.removeItem('username');
     localStorage.removeItem('email');
     localStorage.removeItem('memberSince');
+    localStorage.removeItem('lastBookingGuestName');
+    localStorage.removeItem('lastBookingGuestEmail');
+    localStorage.removeItem('bookingIdentities');
     this.isAuthenticatedSubject.next(false);
   }
 
@@ -73,7 +78,7 @@ export class AuthService {
   }
 
   private setRole(role: string): void {
-    localStorage.setItem('role', role);
+    localStorage.setItem('role', this.cleanRole(role));
   }
 
   getToken(): string | null {
@@ -81,7 +86,8 @@ export class AuthService {
   }
 
   getRole(): string | null {
-    return localStorage.getItem('role');
+    const role = localStorage.getItem('role');
+    return role ? this.cleanRole(role) : null;
   }
 
   getUsername(): string | null {
@@ -90,5 +96,9 @@ export class AuthService {
 
   private hasToken(): boolean {
     return !!this.getToken();
+  }
+
+  private cleanRole(role: string): string {
+    return role.replace('ROLE_', '').toUpperCase();
   }
 }

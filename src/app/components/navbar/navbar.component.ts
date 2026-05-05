@@ -14,12 +14,14 @@ import { Observable } from 'rxjs';
 export class NavbarComponent implements OnInit {
   isAuthenticated$!: Observable<boolean>;
   username: string | null = null; // Ideally this comes from AuthService if we decode the JWT
+  role: string | null = null;
 
   constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.isAuthenticated$ = this.authService.isAuthenticated$;
     this.username = localStorage.getItem('username') || 'My Profile';
+    this.role = this.authService.getRole();
   }
 
   logout() {
