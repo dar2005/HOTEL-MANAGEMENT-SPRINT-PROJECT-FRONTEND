@@ -49,7 +49,7 @@
             </div>
             <div class="col-md-4">
               <strong class="theme-text-muted small text-uppercase tracking-wide"><i class="bi bi-door-closed me-2 theme-accent"></i>Room ID</strong>
-              <p class="mb-0 fs-5 fw-semibold text-white mt-1">Room {{ reservation.roomId }}</p>
+              <p class="mb-0 fs-5 fw-semibold text-white mt-1">Room {{ reservation.roomId || reservation.room?.roomId }}</p>
             </div>
 
             <div class="col-md-4">

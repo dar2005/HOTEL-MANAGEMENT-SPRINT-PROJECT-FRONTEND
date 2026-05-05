@@ -41,7 +41,7 @@ export interface Reservation {
   guestPhone: string;
   checkInDate: Date | string;
   checkOutDate: Date | string;
-  roomId: number;
+  roomId?: number;
   totalPrice?: number;
   // Optional relations
   room?: Room;
@@ -58,6 +58,7 @@ export interface Payment {
 export interface Review {
   reviewId?: number;
   reservationId: number;
+  reviewerName?: string;
   rating: number;
   comment: string;
   reviewDate: Date | string;
@@ -78,5 +79,7 @@ export interface RegisterRequest {
 
 export interface AuthResponse {
   token: string;
+  username?: string;
+  email?: string;
   role?: string;
 }

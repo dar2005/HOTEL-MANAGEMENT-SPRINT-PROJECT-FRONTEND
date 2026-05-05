@@ -31,6 +31,10 @@ export class HotelService {
     return this.http.put<Hotel>(`${this.apiUrl}/${id}`, dto);
   }
 
+  deleteHotel(id: number): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
+  }
+
   searchByLocation(location: string): Observable<Hotel[]> {
     const params = new HttpParams().set('location', location);
     return this.http.get<Hotel[]>(`${this.apiUrl}/search/location`, { params });

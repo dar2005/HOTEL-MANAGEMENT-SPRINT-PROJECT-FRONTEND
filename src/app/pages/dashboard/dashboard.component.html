@@ -8,6 +8,11 @@
     <div class="p-5">
       <h2 class="fw-bold mb-4">My Bookings</h2>
 
+      <div *ngIf="reviewMessage" class="alert alert-success d-flex justify-content-between align-items-center">
+        <span>{{ reviewMessage }}</span>
+        <button type="button" class="btn-close" (click)="reviewMessage = ''"></button>
+      </div>
+
       <div class="theme-card">
         <div class="card-body p-0">
           
@@ -39,11 +44,12 @@
                 <tr *ngFor="let res of reservations">
                   <td class="ps-4 fw-semibold text-primary">#{{ res.reservationId }}</td>
                   <td>{{ res.guestName }}</td>
-                  <td>Room {{ res.roomId }}</td>
+                  <td>Room {{ getRoomId(res) }}</td>
                   <td>{{ res.checkInDate | date }}</td>
                   <td>{{ res.checkOutDate | date }}</td>
                   <td class="pe-4">
                     <button type="button" class="btn btn-sm btn-outline-secondary me-2" (click)="goToDetails(res)"><i class="bi bi-eye"></i> View</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="openReviewForm(res)"><i class="bi bi-star"></i> Write Review</button>
                   </td>
                 </tr>
               </tbody>
@@ -51,6 +57,47 @@
           </div>
 
 
+        </div>
+      </div>
+
+      <div class="theme-card mt-4" *ngIf="reviewReservation">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <h5 class="fw-bold mb-1">Write Review</h5>
+              <p class="text-muted mb-0">Reservation #{{ reviewReservation.reservationId }} · Room {{ getRoomId(reviewReservation) }}</p>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="cancelReview()">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <div *ngIf="reviewError" class="alert alert-danger">{{ reviewError }}</div>
+
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Rating</label>
+              <select class="form-select theme-input" [(ngModel)]="reviewRating">
+                <option [ngValue]="5">5 - Excellent</option>
+                <option [ngValue]="4">4 - Good</option>
+                <option [ngValue]="3">3 - Average</option>
+                <option [ngValue]="2">2 - Poor</option>
+                <option [ngValue]="1">1 - Bad</option>
+              </select>
+            </div>
+            <div class="col-md-9">
+              <label class="form-label fw-semibold">Comment</label>
+              <textarea class="form-control theme-input" rows="3" [(ngModel)]="reviewComment" placeholder="Share your stay experience..."></textarea>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-3">
+            <button type="button" class="btn btn-outline-secondary" (click)="cancelReview()">Cancel</button>
+            <button type="button" class="btn theme-btn-primary px-4" [disabled]="isSubmittingReview" (click)="submitReview()">
+              <span *ngIf="isSubmittingReview" class="spinner-border spinner-border-sm me-2"></span>
+              Submit Review
+            </button>
+          </div>
         </div>
       </div>
     </div>

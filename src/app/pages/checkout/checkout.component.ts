@@ -47,6 +47,7 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.roomId = Number(this.route.snapshot.paramMap.get('roomId'));
+    this.prefillUserDetails();
     this.fetchRoomDetails();
 
     // Calculate price dynamically
@@ -67,6 +68,9 @@ export class CheckoutComponent implements OnInit {
       next: (res) => {
         this.room = res;
         this.totalPrice = res.roomType?.pricePerNight || 0; // default 1 night
+        if (!res.isAvailable) {
+          this.toastr.warning('This room is no longer available. Please choose another room.', 'Room unavailable');
+        }
       },
       error: (err) => {
         this.toastr.error('Could not load room details');
@@ -77,6 +81,11 @@ export class CheckoutComponent implements OnInit {
 
   onSubmit() {
     if (this.checkoutForm.valid && this.room) {
+      if (!this.room.isAvailable) {
+        this.toastr.error('This room is already booked. Please choose an available room.', 'Room unavailable');
+        return;
+      }
+
       this.isLoading = true;
       const formValue = this.checkoutForm.value;
 
@@ -93,13 +102,11 @@ export class CheckoutComponent implements OnInit {
 
       const reservation: Reservation = {
         guestName: formValue.guestName,
-        guestEmail: formValue.guestEmail,
+        guestEmail: localStorage.getItem('email') || formValue.guestEmail,
         guestPhone: formValue.guestPhone,
         checkInDate: formValue.checkInDate,
         checkOutDate: formValue.checkOutDate,
-        roomId: this.roomId,
-        room: { roomId: this.roomId } as Room,
-        totalPrice: this.totalPrice
+        room: { roomId: this.roomId } as Room
       };
 
       // 1. Create Reservation
@@ -109,7 +116,8 @@ export class CheckoutComponent implements OnInit {
           const paymentDto = {
             reservationId: res.reservationId || res.id,
             amount: this.totalPrice,
-            paymentMethod: formValue.paymentType
+            paymentDate: new Date().toISOString().split('T')[0],
+            paymentStatus: formValue.paymentType === 'ONLINE' ? 'SUCCESS' : 'PENDING'
           };
           
           this.http.post(`${environment.apiUrl}/api/payments`, paymentDto).subscribe({
@@ -128,11 +136,30 @@ export class CheckoutComponent implements OnInit {
         },
         error: (err) => {
           this.isLoading = false;
-          this.toastr.error('Failed to create reservation', 'Error');
+          const message = this.getErrorMessage(err) || 'Failed to create reservation';
+          this.toastr.error(message, 'Error');
         }
       });
     } else {
       this.checkoutForm.markAllAsTouched();
     }
+  }
+
+  private getErrorMessage(err: any): string | null {
+    if (typeof err?.error === 'string') {
+      return err.error;
+    }
+
+    return err?.error?.message || err?.message || null;
+  }
+
+  private prefillUserDetails(): void {
+    const username = localStorage.getItem('username');
+    const email = localStorage.getItem('email');
+
+    this.checkoutForm.patchValue({
+      guestName: username || '',
+      guestEmail: email || ''
+    });
   }
 }

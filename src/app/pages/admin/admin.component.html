@@ -1,97 +1,318 @@
-<div class="d-flex" style="height: 100vh;">
-  <!-- Sidebar -->
+<div class="admin-shell">
   <app-sidebar [role]="'ADMIN'"></app-sidebar>
 
-  <!-- Main Content -->
-  <div class="flex-grow-1 overflow-auto bg-light">
-    <div class="p-5">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold m-0">Admin Overview</h2>
-        <button class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>New Room</button>
+  <main class="admin-main">
+    <div class="admin-header">
+      <div>
+        <p class="eyebrow">Admin Console</p>
+        <h1>Operations</h1>
       </div>
-
-      <!-- Stats Cards -->
-      <div class="row g-4 mb-5">
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm rounded-4 h-100 bg-primary text-white">
-            <div class="card-body p-4 d-flex align-items-center justify-content-between">
-              <div>
-                <h6 class="text-uppercase fw-semibold mb-2" style="letter-spacing: 1px;">Total Rooms</h6>
-                <h2 class="fw-bold mb-0">{{ totalRooms }}</h2>
-              </div>
-              <i class="bi bi-door-open fs-1 opacity-50"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm rounded-4 h-100 bg-success text-white">
-            <div class="card-body p-4 d-flex align-items-center justify-content-between">
-              <div>
-                <h6 class="text-uppercase fw-semibold mb-2" style="letter-spacing: 1px;">Reservations</h6>
-                <h2 class="fw-bold mb-0">{{ totalReservations }}</h2>
-              </div>
-              <i class="bi bi-calendar-check fs-1 opacity-50"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm rounded-4 h-100 bg-warning text-white">
-            <div class="card-body p-4 d-flex align-items-center justify-content-between">
-              <div>
-                <h6 class="text-uppercase fw-semibold mb-2" style="letter-spacing: 1px;">Revenue</h6>
-                <h2 class="fw-bold mb-0">$12,450</h2>
-              </div>
-              <i class="bi bi-graph-up fs-1 opacity-50"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Recent Bookings Table -->
-      <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
-          <h5 class="fw-bold m-0">Recent Bookings</h5>
-        </div>
-        <div class="card-body p-0 mt-3">
-          
-          <div *ngIf="isLoading" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status"></div>
-          </div>
-
-          <div class="table-responsive" *ngIf="!isLoading">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th scope="col" class="ps-4">ID</th>
-                  <th scope="col">Guest Name</th>
-                  <th scope="col">Room ID</th>
-                  <th scope="col">Check In</th>
-                  <th scope="col">Check Out</th>
-                  <th scope="col" class="pe-4">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let res of recentReservations">
-                  <td class="ps-4 fw-semibold text-primary">#{{ res.reservationId }}</td>
-                  <td>{{ res.guestName }}</td>
-                  <td>Room {{ res.roomId }}</td>
-                  <td>{{ res.checkInDate | date }}</td>
-                  <td>{{ res.checkOutDate | date }}</td>
-                  <td class="pe-4">
-                    <button class="btn btn-sm btn-outline-secondary me-2"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                  </td>
-                </tr>
-                <tr *ngIf="recentReservations.length === 0">
-                  <td colspan="6" class="text-center text-muted py-4">No recent bookings.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-        </div>
-      </div>
-      
+      <button class="icon-btn" type="button" title="Refresh" (click)="loadAdminData()">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
     </div>
-  </div>
+
+    <div class="alert success" *ngIf="message">
+      <span>{{ message }}</span>
+      <button type="button" (click)="message = ''"><i class="bi bi-x"></i></button>
+    </div>
+    <div class="alert error" *ngIf="errorMsg">
+      <span>{{ errorMsg }}</span>
+      <button type="button" (click)="errorMsg = ''"><i class="bi bi-x"></i></button>
+    </div>
+
+    <section class="stats-grid">
+      <div class="stat">
+        <span>Hotels</span>
+        <strong>{{ hotels.length }}</strong>
+      </div>
+      <div class="stat">
+        <span>Rooms</span>
+        <strong>{{ rooms.length }}</strong>
+      </div>
+      <div class="stat">
+        <span>Available</span>
+        <strong>{{ availableRoomsCount }}</strong>
+      </div>
+      <div class="stat">
+        <span>Bookings</span>
+        <strong>{{ reservations.length }}</strong>
+      </div>
+      <div class="stat">
+        <span>Reviews</span>
+        <strong>{{ reviews.length }}</strong>
+      </div>
+    </section>
+
+    <div class="tabs">
+      <button type="button" [class.active]="activeTab === 'hotels'" (click)="activeTab = 'hotels'">
+        <i class="bi bi-building"></i> Hotels
+      </button>
+      <button type="button" [class.active]="activeTab === 'rooms'" (click)="activeTab = 'rooms'">
+        <i class="bi bi-door-open"></i> Rooms
+      </button>
+      <button type="button" [class.active]="activeTab === 'bookings'" (click)="activeTab = 'bookings'">
+        <i class="bi bi-calendar-check"></i> Bookings
+      </button>
+      <button type="button" [class.active]="activeTab === 'reviews'" (click)="activeTab = 'reviews'">
+        <i class="bi bi-star"></i> Reviews
+      </button>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <section class="panel" *ngIf="!isLoading && activeTab === 'hotels'">
+      <div class="panel-head">
+        <div>
+          <h2>Hotel Management</h2>
+          <p>Add, edit, delete, and review hotel records.</p>
+        </div>
+        <button class="primary-btn" type="button" (click)="openHotelForm()">
+          <i class="bi bi-plus-lg"></i> Add Hotel
+        </button>
+      </div>
+
+      <div class="toolbar">
+        <div class="search">
+          <i class="bi bi-search"></i>
+          <input type="text" [(ngModel)]="hotelSearch" placeholder="Search hotel, location, ID">
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Hotel</th>
+              <th>Location</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let hotel of filteredHotels">
+              <td>#{{ hotel.hotelId }}</td>
+              <td>{{ hotel.name }}</td>
+              <td>{{ hotel.location }}</td>
+              <td class="muted">{{ hotel.description || 'No description' }}</td>
+              <td class="actions">
+                <button type="button" title="Edit" (click)="openHotelForm(hotel)"><i class="bi bi-pencil"></i></button>
+                <button type="button" title="Delete" class="danger" (click)="deleteHotel(hotel)"><i class="bi bi-trash"></i></button>
+              </td>
+            </tr>
+            <tr *ngIf="filteredHotels.length === 0">
+              <td colspan="5" class="empty">No hotels found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" *ngIf="!isLoading && activeTab === 'rooms'">
+      <div class="panel-head">
+        <div>
+          <h2>Room Management</h2>
+          <p>Create rooms, manage type, pricing, capacity, and availability.</p>
+        </div>
+        <div class="segmented">
+          <button type="button" [class.active]="roomFilter === 'ALL'" (click)="roomFilter = 'ALL'">All</button>
+          <button type="button" [class.active]="roomFilter === 'AVAILABLE'" (click)="roomFilter = 'AVAILABLE'">Available</button>
+          <button type="button" [class.active]="roomFilter === 'UNAVAILABLE'" (click)="roomFilter = 'UNAVAILABLE'">Unavailable</button>
+        </div>
+      </div>
+
+      <form class="inline-form" (ngSubmit)="createRoom()">
+        <input type="number" name="roomId" [(ngModel)]="newRoom.roomId" placeholder="Room ID">
+        <input type="number" name="roomNumber" [(ngModel)]="newRoom.roomNumber" placeholder="Room number">
+        <select name="roomTypeId" [(ngModel)]="newRoom.roomTypeId">
+          <option [ngValue]="0">Room type</option>
+          <option *ngFor="let type of roomTypes" [ngValue]="type.roomTypeId">
+            {{ type.typeName }} - ${{ type.pricePerNight }} - {{ type.maxOccupancy }} guests
+          </option>
+        </select>
+        <label class="check">
+          <input type="checkbox" name="isAvailable" [(ngModel)]="newRoom.isAvailable">
+          Available
+        </label>
+        <button type="submit" class="primary-btn"><i class="bi bi-plus-lg"></i> Add Room</button>
+      </form>
+
+      <div class="bulk-row">
+        <span>{{ filteredRooms.length }} room(s) selected by filter</span>
+        <button type="button" (click)="bulkSetRooms(true)">Mark Available</button>
+        <button type="button" (click)="bulkSetRooms(false)">Mark Unavailable</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Room</th>
+              <th>Type</th>
+              <th>Price</th>
+              <th>Capacity</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let room of filteredRooms">
+              <td>#{{ room.roomId }}</td>
+              <td>{{ room.roomNumber }}</td>
+              <td>{{ getRoomTypeName(room) }}</td>
+              <td>${{ getRoomPrice(room) }}</td>
+              <td>{{ getRoomCapacity(room) }}</td>
+              <td>
+                <button type="button" class="status-toggle" [class.on]="room.isAvailable" (click)="setRoomAvailability(room, !room.isAvailable)">
+                  {{ room.isAvailable ? 'Available' : 'Unavailable' }}
+                </button>
+              </td>
+              <td class="actions">
+                <button type="button" title="Delete" class="danger" (click)="deleteRoom(room)"><i class="bi bi-trash"></i></button>
+              </td>
+            </tr>
+            <tr *ngIf="filteredRooms.length === 0">
+              <td colspan="7" class="empty">No rooms found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" *ngIf="!isLoading && activeTab === 'bookings'">
+      <div class="panel-head">
+        <div>
+          <h2>Booking Control</h2>
+          <p>View all bookings, filter, modify dates, and cancel reservations.</p>
+        </div>
+      </div>
+
+      <div class="toolbar two">
+        <div class="search">
+          <i class="bi bi-search"></i>
+          <input type="text" [(ngModel)]="bookingSearch" placeholder="Search guest, email, room, reservation ID">
+        </div>
+        <input class="date-filter" type="date" [(ngModel)]="bookingDate">
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Guest</th>
+              <th>Email</th>
+              <th>Room</th>
+              <th>Check In</th>
+              <th>Check Out</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reservation of filteredReservations">
+              <td>#{{ reservation.reservationId }}</td>
+              <td>
+                <input *ngIf="editingReservationId === reservation.reservationId" type="text" [(ngModel)]="editReservation.guestName">
+                <span *ngIf="editingReservationId !== reservation.reservationId">{{ reservation.guestName }}</span>
+              </td>
+              <td>
+                <input *ngIf="editingReservationId === reservation.reservationId" type="email" [(ngModel)]="editReservation.guestEmail">
+                <span *ngIf="editingReservationId !== reservation.reservationId">{{ reservation.guestEmail }}</span>
+              </td>
+              <td>Room {{ getRoomId(reservation) }}</td>
+              <td>
+                <input *ngIf="editingReservationId === reservation.reservationId" type="date" [(ngModel)]="editReservation.checkInDate">
+                <span *ngIf="editingReservationId !== reservation.reservationId">{{ reservation.checkInDate | date }}</span>
+              </td>
+              <td>
+                <input *ngIf="editingReservationId === reservation.reservationId" type="date" [(ngModel)]="editReservation.checkOutDate">
+                <span *ngIf="editingReservationId !== reservation.reservationId">{{ reservation.checkOutDate | date }}</span>
+              </td>
+              <td class="actions">
+                <button *ngIf="editingReservationId !== reservation.reservationId" type="button" title="Edit" (click)="startEditReservation(reservation)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button *ngIf="editingReservationId === reservation.reservationId" type="button" title="Save" (click)="saveReservation(reservation)">
+                  <i class="bi bi-check-lg"></i>
+                </button>
+                <button *ngIf="editingReservationId === reservation.reservationId" type="button" title="Cancel edit" (click)="cancelEditReservation()">
+                  <i class="bi bi-x-lg"></i>
+                </button>
+                <button type="button" title="Cancel booking" class="danger" (click)="deleteReservation(reservation)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="filteredReservations.length === 0">
+              <td colspan="7" class="empty">No bookings found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" *ngIf="!isLoading && activeTab === 'reviews'">
+      <div class="panel-head">
+        <div>
+          <h2>Review Moderation</h2>
+          <p>View all reviews, filter by rating, and remove inappropriate feedback.</p>
+        </div>
+      </div>
+
+      <div class="toolbar two">
+        <div class="search">
+          <i class="bi bi-search"></i>
+          <input type="text" [(ngModel)]="reviewSearch" placeholder="Search comment, review ID, reservation ID">
+        </div>
+        <select class="date-filter" [(ngModel)]="reviewRatingFilter">
+          <option value="ALL">All ratings</option>
+          <option [ngValue]="5">5 stars</option>
+          <option [ngValue]="4">4 stars</option>
+          <option [ngValue]="3">3 stars</option>
+          <option [ngValue]="2">2 stars</option>
+          <option [ngValue]="1">1 star</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Reservation</th>
+              <th>Rating</th>
+              <th>Comment</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let review of filteredReviews">
+              <td>#{{ review.reviewId }}</td>
+              <td>#{{ review.reservationId || 'N/A' }}</td>
+              <td>
+                <span class="rating-pill">
+                  <i class="bi bi-star-fill"></i> {{ review.rating }}
+                </span>
+              </td>
+              <td>{{ review.comment }}</td>
+              <td>{{ review.reviewDate | date }}</td>
+              <td class="actions">
+                <button type="button" title="Delete review" class="danger" (click)="deleteReview(review)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="filteredReviews.length === 0">
+              <td colspan="6" class="empty">No reviews found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 </div>
