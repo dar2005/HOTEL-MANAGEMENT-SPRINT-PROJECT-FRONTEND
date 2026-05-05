@@ -4,22 +4,32 @@
   <ul class="nav nav-pills flex-column mb-auto" *ngIf="role === 'ADMIN'">
     <li class="nav-item">
       <a routerLink="/admin" routerLinkActive="active" class="nav-link fw-semibold mb-1">
-        <i class="bi bi-speedometer2 me-2"></i> Overview
+        <i class="bi bi-speedometer2 me-2"></i> Dashboard
       </a>
     </li>
-    <li>
-      <a routerLink="/rooms" routerLinkActive="active" class="nav-link fw-semibold mb-1">
-        <i class="bi bi-door-open me-2"></i> Manage Rooms
-      </a>
-    </li>
-    <li>
-      <a routerLink="/hotel-admin" routerLinkActive="active" class="nav-link fw-semibold mb-1">
+    <li class="nav-item">
+      <a routerLink="/hotels-manage" routerLinkActive="active" class="nav-link fw-semibold mb-1">
         <i class="bi bi-building me-2"></i> Hotels
       </a>
     </li>
-    <li>
-      <a routerLink="/dashboard" routerLinkActive="active" class="nav-link fw-semibold mb-1">
-        <i class="bi bi-card-checklist me-2"></i> All Bookings
+    <li class="nav-item">
+      <a routerLink="/rooms-manage" routerLinkActive="active" class="nav-link fw-semibold mb-1">
+        <i class="bi bi-door-open me-2"></i> Rooms
+      </a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="/bookings-manage" routerLinkActive="active" class="nav-link fw-semibold mb-1">
+        <i class="bi bi-calendar-check me-2"></i> Bookings
+      </a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="/payments-manage" routerLinkActive="active" class="nav-link fw-semibold mb-1">
+        <i class="bi bi-cash-coin me-2"></i> Payments
+      </a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="/reviews" routerLinkActive="active" class="nav-link fw-semibold mb-1">
+        <i class="bi bi-star-fill me-2"></i> Reviews
       </a>
     </li>
   </ul>
@@ -31,9 +41,14 @@
         <i class="bi bi-calendar2-check me-2"></i> My Bookings
       </a>
     </li>
-    <li>
+    <li class="nav-item">
       <a routerLink="/profile" routerLinkActive="active" class="nav-link fw-semibold mb-1">
         <i class="bi bi-person me-2"></i> My Profile
+      </a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="/reviews" routerLinkActive="active" class="nav-link fw-semibold mb-1">
+        <i class="bi bi-star-fill me-2"></i> My Reviews
       </a>
     </li>
   </ul>

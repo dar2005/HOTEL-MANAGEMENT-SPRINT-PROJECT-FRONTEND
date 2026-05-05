@@ -1,0 +1,192 @@
+<div class="admin-page">
+  <app-navbar></app-navbar>
+
+  <div class="admin-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <i class="bi bi-door-open-fill"></i>
+        <span>Room Admin</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-link" routerLink="/admin">
+          <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+        <a class="nav-link" routerLink="/hotel-admin">
+          <i class="bi bi-building"></i> Hotels
+        </a>
+        <a class="nav-link active" routerLink="/rooms-manage">
+          <i class="bi bi-door-open"></i> Rooms
+        </a>
+        <a class="nav-link" routerLink="/bookings-manage">
+          <i class="bi bi-calendar-check"></i> Bookings
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="stat-box">
+          <span class="stat-label">Total Rooms</span>
+          <span class="stat-value">{{ filteredRooms.length }}</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+
+      <!-- Top Bar -->
+      <div class="admin-topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">Room Management</h1>
+          <p class="page-sub">Manage all room records — create, edit, delete, and update availability.</p>
+        </div>
+        <div class="topbar-right">
+          <button class="btn-add" (click)="openForm()" [disabled]="showForm">
+            <i class="bi bi-plus-lg me-2"></i>Add Room
+          </button>
+        </div>
+      </div>
+
+      <!-- Bulk Actions Bar -->
+      <div class="alert alert-info" *ngIf="showBulkActions">
+        <div class="d-flex align-items-center w-100">
+          <span><i class="bi bi-info-circle me-2"></i>{{ selectedRoomIds.size }} room(s) selected</span>
+          <div class="bulk-actions ms-auto">
+            <button class="btn-bulk success" (click)="bulkMarkAvailable()">
+              <i class="bi bi-check-circle me-1"></i> Available
+            </button>
+            <button class="btn-bulk warning" (click)="bulkMarkUnavailable()">
+              <i class="bi bi-x-circle me-1"></i> Unavailable
+            </button>
+            <button class="btn-bulk" (click)="clearSelection()">
+              <i class="bi bi-x me-1"></i> Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Card -->
+      <div *ngIf="showForm" class="form-card">
+        <div class="form-header">
+          {{ editingId ? 'Edit Room' : 'Add New Room' }}
+        </div>
+        <form [formGroup]="roomForm">
+          <div class="row g-3">
+            <div class="col-md-6 form-group">
+              <label class="form-label">Room Number *</label>
+              <input type="number" class="form-control" formControlName="roomNumber" placeholder="e.g. 101">
+            </div>
+            <div class="col-md-6 form-group">
+              <label class="form-label">Hotel *</label>
+              <select class="form-select form-control" formControlName="hotelId" style="background-color: rgba(255,255,255,0.05); color: #fff;">
+                <option value="" style="background: #111118;">Select Hotel</option>
+                <option *ngFor="let hotel of hotels" [value]="hotel.hotelId" style="background: #111118;">
+                  {{ hotel.name }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-6 form-group">
+              <label class="form-label">Room Type ID *</label>
+              <input type="number" class="form-control" formControlName="roomTypeId" placeholder="e.g. 1">
+            </div>
+            <div class="col-md-6 form-group">
+              <label class="form-label">Status</label>
+              <div class="form-check">
+                <input class="form-check-input custom-checkbox" type="checkbox" formControlName="isAvailable" id="isAvailable">
+                <label class="form-check-label ms-2" for="isAvailable" style="color: #fff;">
+                  Room is Available
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-add" (click)="saveRoom()" [disabled]="roomForm.invalid">
+              <i class="bi bi-check-lg me-2"></i> Save Room
+            </button>
+            <button type="button" class="btn-bulk" (click)="closeForm()" style="padding: 11px 20px;">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Search & Filter Bar -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <i class="bi bi-search"></i>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            placeholder="Search by room number..."
+            class="search-input"
+          />
+        </div>
+        <select class="filter-select" [(ngModel)]="filterStatus">
+          <option value="all">All Rooms</option>
+          <option value="available">Available Only</option>
+          <option value="unavailable">Unavailable Only</option>
+        </select>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="isLoading" class="loading-state">
+        <div class="loading-ring"></div>
+        <p>Loading room records...</p>
+      </div>
+
+      <!-- Rooms Table -->
+      <div class="table-card" *ngIf="!isLoading">
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;"></th>
+                <th>Room #</th>
+                <th>Hotel</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let room of filteredRooms" class="table-row" [ngClass]="{'selected': isRoomSelected(room.roomId || 0)}">
+                <td>
+                  <input type="checkbox" class="custom-checkbox"
+                         [checked]="isRoomSelected(room.roomId || 0)"
+                         (change)="toggleRoomSelection(room.roomId || 0)">
+                </td>
+                <td><strong>{{ room.roomNumber }}</strong></td>
+                <td style="color: rgba(255,255,255,0.65);">{{ getHotelName(room.hotelId) }}</td>
+                <td>{{ room.roomType?.typeName || 'Type ' + room.roomTypeId }}</td>
+                <td>
+                  <span class="status-badge" [ngClass]="room.isAvailable ? 'success' : 'danger'">
+                    {{ room.isAvailable ? 'Available' : 'Unavailable' }}
+                  </span>
+                </td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-action btn-edit" (click)="openForm(room)" title="Edit">
+                      <i class="bi bi-pencil-fill"></i>
+                    </button>
+                    <button class="btn-action btn-toggle" (click)="toggleAvailability(room)" title="Toggle Availability">
+                      <i class="bi bi-arrow-repeat"></i>
+                    </button>
+                    <button class="btn-action btn-delete" (click)="deleteRoom(room.roomId || 0)" title="Delete">
+                      <i class="bi bi-trash3-fill"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredRooms.length === 0">
+                <td colspan="6" class="text-center py-5" style="color: rgba(255,255,255,0.4);">
+                  No rooms found matching your criteria.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>

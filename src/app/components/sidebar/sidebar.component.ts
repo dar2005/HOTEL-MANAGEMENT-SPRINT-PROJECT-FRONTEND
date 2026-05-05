@@ -22,6 +22,12 @@ export class SidebarComponent implements OnInit {
       // Show first name only for a clean sidebar
       this.displayName = savedName.split(' ')[0] || savedName;
     }
+
+    // Always check localStorage for role (works in both production and development)
+    const storedRole = localStorage.getItem('role');
+    if (storedRole) {
+      this.role = storedRole as 'USER' | 'ADMIN';
+    }
   }
 
   logout() {
